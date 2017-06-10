@@ -33,4 +33,5 @@
     <!--Sync-->
     <string name="key_error_no_connectivity">No internet connectivity.</string>
     <string name="button_title_ok">OK</string>
+    <string name="title_activity_register">" "</string>
 </resources>

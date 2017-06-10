@@ -121,7 +121,7 @@
     <color name="chip_border_stroke_color">#CECECE</color>
 
     <!-- Progress Dialogue -->
-    <color name="progress_dialogue_bg">#FAFAFA</color>
+    <color name="progress_dialogue_bg">#000</color>
     <color name="progress_dialogue_button_text_colour">#FFF</color>
     <color name="progress_dialogue_pos_btn_bg_colour">#1D86C1</color>
     <color name="progress_dialogue_neg_btn_bg_colour">#999999</color>

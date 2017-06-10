@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shortly.shortlyapp.BuildConfig;
-import com.shortly.shortlyapp.DataProvider.Prefs;
 import com.shortly.shortlyapp.Interfaces.ProgressLoaderInterface;
 import com.shortly.shortlyapp.Interfaces.SyncInterface;
 import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
@@ -70,14 +69,7 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
 
         if (BuildConfig.DEBUG) {
             mEditTextEmail.setText("shortlytest@gmail.com");
-            mEditTextPassword.setText("FFdemo15");
-        } else {
-            mEditTextEmail.setText("");
-            String lastUserEmail = Prefs.getInstance(this).getEmployeeEmail();
-            if (lastUserEmail != null && !lastUserEmail.equals("")) {
-                mEditTextEmail.setText(lastUserEmail);
-            }
-            mEditTextPassword.setText("");
+            mEditTextPassword.setText("shortly1234");
         }
 
         mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {

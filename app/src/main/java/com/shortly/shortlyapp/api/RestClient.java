@@ -84,14 +84,14 @@ public class RestClient {
     }
 
     public interface ShortlyApiInterface {
-        @POST("users/login")
+        @POST("api/users/login")
         @Headers({
                 "Accept:application/json",
                 "Content-Type:text/plain; charset=utf-8"
         })
         Call<LoginResponseDTO> authenticateUser(@Body HashMap<String, Object> loginInfo);
 
-        @POST("users/signup")
+        @POST("api/users/signup")
         @Headers({
                 "Accept:application/json",
                 "Content-Type:text/plain; charset=utf-8"

@@ -132,6 +132,9 @@ public class ProgressHandler {
             case Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED:
                 mSmoothProgressBar.setVisibility(View.VISIBLE);
                 break;
+            case Constants.ProgressBarStyles.PROGRESS_BAR_NONE:
+                mSmoothProgressBar.setVisibility(View.GONE);
+                break;
         }
         mMessageTextView.setText(progressMessage);
     }
