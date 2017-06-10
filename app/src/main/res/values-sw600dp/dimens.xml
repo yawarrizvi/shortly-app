@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="isTablet">true</bool>
+
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">35dp</dimen>
+    <dimen name="nav_header_height">300dp</dimen>
+
+
+    <dimen name="tag_font_size">12sp</dimen>
+
+    <!-- TabLayout height (TABLET) -->
+    <dimen name="tab_layout_height">110dp</dimen>
+    <dimen name="tab_layout_indicator_height">4dp</dimen>
+
+    <dimen name="tab_text_size">18sp</dimen>
+
+
+    <!-- Task List Activity -->
+    <dimen name="circular_progress_container_margin_right">15dp</dimen>
+    <dimen name="circular_progress_size">75dp</dimen>
+    <dimen name="circular_progress_stroke_width">3dp</dimen>
+    <dimen name="task_item_padding">10dp</dimen>
+    <dimen name="task_content_margin_left">5dp</dimen>
+    <dimen name="task_date_txt_size">13sp</dimen>
+    <dimen name="task_date_txt_margin_top">1dp</dimen>
+    <dimen name="task_site_name_size">20sp</dimen>
+    <dimen name="task_list_tag_text_size">16sp</dimen>
+
+
+    <!-- Survey Landing Maintenance View-->
+    <!-- 1 - Banner (TABLET) -->
+    <dimen name="site_banner_score_label">16sp</dimen>
+    <dimen name="site_banner_score_size">40sp</dimen>
+    <dimen name="site_banner_duration_size">19sp</dimen>
+    <dimen name="site_banner_duration_margin_left">11dp</dimen>
+    <dimen name="site_banner_progress">170dp</dimen>
+    <dimen name="site_banner_progress_stroke_width">10dp</dimen>
+    <dimen name="site_banner_info_layout_padding">28dp</dimen>
+    <dimen name="site_banner_info_separator">18dp</dimen>
+    <dimen name="site_banner_left_vertical_bar">4dp</dimen>
+    <dimen name="site_sections_padding_top">28dp</dimen>
+
+    <!-- 2 - Graphs (TABLET) -->
+    <dimen name="graph_framelayout_margin_bottom">18dp</dimen>
+    <dimen name="graph_progress_circle_size">110dp</dimen>
+    <dimen name="graph_section_icon_image_size">60dp</dimen>
+    <dimen name="graph_stroke_width">5dp</dimen>
+    <dimen name="graph_text_score">20sp</dimen>
+    <dimen name="graph_text_score_label">20sp</dimen>
+
+    <!-- 3 - Buttons Panel (TABLET) -->
+    <dimen name="survey_button_linearlayout_padding_top">20dp</dimen>
+    <dimen name="survey_button_linearlayout_padding_left">34dp</dimen>
+    <dimen name="survey_button_linearlayout_padding_right">34dp</dimen>
+    <dimen name="survey_button_separator">12dp</dimen>
+    <dimen name="survey_button_height">80dp</dimen>
+    <dimen name="survey_button_text_size">18sp</dimen>
+
+    <!-- Site Mini Info -->
+    <dimen name="site_info_label_height">80dp</dimen>
+    <dimen name="header_margin_left">25dp</dimen>
+    <dimen name="site_info_text">20sp</dimen>
+    <dimen name="site_info_detail_value">26sp</dimen>
+    <dimen name="site_info_detail_key">16sp</dimen>
+    <dimen name="site_coordinates_text">20sp</dimen>
+    <dimen name="site_coordinates_label">18sp</dimen>
+    <dimen name="site_info_footer_separator_margin">10dp</dimen>
+    <dimen name="site_info_footer_separator_width">1dp</dimen>
+    <dimen name="site_info_footer_margin_left">5dp</dimen>
+    <dimen name="site_info_footer_layout_margin_left_right">15dp</dimen>
+    <dimen name="site_info_footer_margin">20dp</dimen>
+    <dimen name="site_info_detail_margin_left">25dp</dimen>
+    <dimen name="site_info_list_item_margin">38dp</dimen>
+    <dimen name="site_mini_info_value">24sp</dimen>
+    <dimen name="site_mini_info_key">16sp</dimen>
+    <dimen name="site_mini_info_fab_size">70dp</dimen>
+
+
+    <!-- Gallery -->
+    <dimen name="gallery_thumbnail_selection_icon_margin_right">5dp</dimen>
+    <dimen name="gallery_thumbnail_selection_icon_margin_top">5dp</dimen>
+    <dimen name="gallery_thumbnail_margin_top">5dp</dimen>
+    <dimen name="gallery_thumbnail_margin_left">5dp</dimen>
+    <dimen name="gallery_thumbnail_selection_icon_size">40dp</dimen>
+
+
+    <!-- Sub Section List Activity -->
+    <!-- 1- Gird Card layout -->
+    <dimen name="sub_section_recycler_view_padding">20dp</dimen>
+    <dimen name="card_item_height">250dp</dimen>
+    <dimen name="card_item_margin_left_right_top">8dp</dimen>
+    <dimen name="card_item_margin_bottom">20dp</dimen>
+    <dimen name="card_item_thumb_layout_height">150dp</dimen>
+    <dimen name="card_item_icon_size">70dp</dimen>
+    <dimen name="card_title_text_size">16sp</dimen>
+    <dimen name="card_title_padding">15dp</dimen>
+    <dimen name="card_status_margin_bottom">20dp</dimen>
+    <dimen name="card_item_status_text_size">12sp</dimen>
+    <dimen name="card_item_status_indicator_size">30dp</dimen>
+    <dimen name="card_item_status_indicator_margin">3dp</dimen>
+
+    <!-- 2- List layout -->
+    <dimen name="list_item_padding">20dp</dimen>
+    <dimen name="list_item_status_tag_margin_bottom">5dp</dimen>
+    <dimen name="list_item_status_tag_margin_left">10dp</dimen>
+    <dimen name="list_item_status_title_margin_left">10dp</dimen>
+
+    <!-- Group Item List Activity -->
+    <!-- 1- root view -->
+    <dimen name="no_item_image_size">150dp</dimen>
+    <dimen name="no_item_image_margin_bottom">20dp</dimen>
+    <dimen name="applicable_toggle_button_size">40dp</dimen>
+    <dimen name="applicable_toggle_button_margin_right">10dp</dimen>
+    <dimen name="applicable_toggle_button_margin_Top">10dp</dimen>
+    <dimen name="root_question_text_size">22sp</dimen>
+    <dimen name="root_comment_margin_top">5dp</dimen>
+    <dimen name="fab_add_asset_margin">16dp</dimen>
+    <dimen name="group_question_fab_add_asset_margin">16dp</dimen>
+    <dimen name="question_area_padding">20dp</dimen>
+    <dimen name="empty_item_text_size">18sp</dimen>
+    <dimen name="add_group_detail_fab_size">70dp</dimen>
+
+    <!-- 2- detail view -->
+    <dimen name="group_question_image_scroller_height">300dp</dimen>
+    <dimen name="group_question_image_scroller_text_size">26sp</dimen>
+    <dimen name="group_question_image_scroller_text_view_margin">15dp</dimen>
+    <dimen name="group_question_empty_scroller_view_height">80dp</dimen>
+    <dimen name="group_question_empty_scroller_view_width">80dp</dimen>
+    <dimen name="group_question_scroller_text_size">19sp</dimen>
+    <dimen name="group_question_chip_text_size">20sp</dimen>
+    <dimen name="group_question_chip_delete_button_size">40dp</dimen>
+    <dimen name="group_question_image_view_dimension">65dp</dimen>
+
+    <dimen name="list_group_question_padding">8dp</dimen>
+    <dimen name="list_group_question_card_padding">18dp</dimen>
+    <dimen name="list_group_question_card_margin_top">4dp</dimen>
+    <dimen name="list_group_question_card_margin_bottom">10dp</dimen>
+    <dimen name="list_group_question_card_corner_radius">5dp</dimen>
+
+    <!-- Login -->
+    <dimen name="login_logo_margin_top">150dp</dimen>
+    <dimen name="login_button_height">80dp</dimen>
+    <dimen name="login_ui_items_margin_left">15dp</dimen>
+    <dimen name="login_ui_items_margin_right">15dp</dimen>
+
+    <dimen name="login_email_text_view_margin_top">130dp</dimen>
+    <dimen name="login_password_text_view_margin_top">20dp</dimen>
+    <dimen name="login_text_view_padding_left">15dp</dimen>
+    <dimen name="login_text_view_height">60dp</dimen>
+    <dimen name="login_text_view_drawable_padding">15dp</dimen>
+    <dimen name="login_button_text_size">26sp</dimen>
+    <dimen name="login_text_view_text_size">24sp</dimen>
+    <dimen name="login_forgot_password_text_size">14sp</dimen>
+    <dimen name="login_button_margin_top">40dp</dimen>
+    <dimen name="forgot_password_button_margin_top">50dp</dimen>
+    <dimen name="login_ff_logo_width">246dp</dimen>
+    <dimen name="login_ff_logo_height">60dp</dimen>
+
+    <!-- Navigation Drawer Header -->
+    <dimen name="profile_pic_item_border_width">4dp</dimen>
+
+    <!-- Progress View -->
+    <dimen name="circular_progress_bar_size">125dp</dimen>
+    <dimen name="progress_view_top_margin">10dp</dimen>
+    <dimen name="progress_view_layout_margin">10dp</dimen>
+    <dimen name="progress_view_title_text_size">22sp</dimen>
+    <dimen name="progress_view_message_text_size">18sp</dimen>
+    <dimen name="progress_view_button_text_size">20sp</dimen>
+    <dimen name="progress_view_button_height">60dp</dimen>
+    <dimen name="progress_view_progress_text_size">18sp</dimen>
+
+    <dimen name="group_overflow_menu_width">60dp</dimen>
+
+    <!-- CM -->
+    <dimen name="cm_info_text">20sp</dimen>
+    <dimen name="cm_title_text_size">17sp</dimen>
+    <dimen name="cm_value_text_size">18sp</dimen>
+    <dimen name="add_cm_button_height">65dp</dimen>
+
+    <!--<dimen name="button_layout_margin">15dp</dimen>-->
+
+    <dimen name="button_layout_margin_top">18dp</dimen>
+    <dimen name="button_layout_margin_bottom">18dp</dimen>
+    <dimen name="cancel_button_layout_margin_left">25dp</dimen>
+    <dimen name="cancel_button_layout_margin_right">12dp</dimen>
+    <dimen name="create_button_layout_margin_right">25dp</dimen>
+    <dimen name="create_button_layout_margin_left">12dp</dimen>
+
+
+    <dimen name="title_margin_top">22dp</dimen>
+    <dimen name="title_margin_left">15dp</dimen>
+    <dimen name="title_margin_bottom">12dp</dimen>
+
+    <dimen name="value_margin_left">14dp</dimen>
+    <dimen name="value_margin_right">15dp</dimen>
+    <dimen name="value_margin_bottom">11dp</dimen>
+
+    <!-- FT Dashboard -->
+    <dimen name="dashboard_tab_text_size">16sp</dimen>
+    <dimen name="dashboard_score_stroke_width">12dp</dimen>
+    <dimen name="dashboard_left_vertical_bar">5dp</dimen>
+    <dimen name="dashboard_progress_circle_size">185dp</dimen>
+    <dimen name="dashboard_layout_marginTop">25dp</dimen>
+    <dimen name="dashboard_layout_marginBottom">25dp</dimen>
+    <dimen name="dashboard_info_layout_padding">20dp</dimen>
+    <dimen name="dashboard_info_layout_margin">40dp</dimen>
+
+    <dimen name="dashboard_detail_icon_margin_right">30dp</dimen>
+
+    <dimen name="dashboard_user_score_text_size">40sp</dimen>
+    <dimen name="dashboard_value_text_size">45sp</dimen>
+    <dimen name="dashboard_key_text_size">16sp</dimen>
+
+    <!-- FT Dashboard Tasks-->
+    <dimen name="dashboard_task_label_text_size">20sp</dimen>
+    <dimen name="dashboard_task_item_padding_left_right">15dp</dimen>
+    <dimen name="dashboard_task_item_padding_top_bottom">13dp</dimen>
+    <dimen name="dashboard_task_label_margin">5dp</dimen>
+    <dimen name="dashboard_task_pill_value_text_size">20sp</dimen>
+    <dimen name="dashboard_task_pill_key_text_size">12sp</dimen>
+    <dimen name="dashboard_task_pill_layout_margin">14dp</dimen>
+    <dimen name="dashboard_task_pill_value_width">42dp</dimen>
+    <dimen name="dashboard_task_pill_value_margin_left">5dp</dimen>
+
+    <dimen name="dashboard_task_pill_detail_icon_width">7dp</dimen>
+    <dimen name="dashboard_task_pill_detail_icon_height">14dp</dimen>
+    <dimen name="dashboard_task_pill_detail_icon_margin_right">2dp</dimen>
+
+    <dimen name="dashboard_task_pill_margin_right">8dp</dimen>
+    <dimen name="dashboard_task_pill_margin_top">9dp</dimen>
+    <dimen name="dashboard_task_pill_margin_bottom">9dp</dimen>
+    <dimen name="dashboard_task_content_margin_left">5dp</dimen>
+
+    <!-- FT Dashboard Performance-->
+    <dimen name="dashboard_performance_layout_margin_top">25dp</dimen>
+    <dimen name="dashboard_performance_layout_margin_bottom">25dp</dimen>
+    <dimen name="dashboard_performance_layout_margin_left">10dp</dimen>
+    <dimen name="dashboard_performance_detail_icon_width">12dp</dimen>
+    <dimen name="dashboard_performance_detail_icon_height">23dp</dimen>
+    <dimen name="dashboard_performance_detail_margin_left">25dp</dimen>
+    <dimen name="dashboard_performance_sites_icon_padding">10dp</dimen>
+    <dimen name="dashboard_performance_rank_icon_padding">5dp</dimen>
+    <dimen name="dashboard_performance_rank_text_size">24sp</dimen>
+    <dimen name="dashboard_performance_rank_value_text_size">35sp</dimen>
+    <dimen name="dashboard_performance_sites_value_text_size">80sp</dimen>
+    <dimen name="dashboard_performance_sites_text_size">24sp</dimen>
+
+    <!-- FT Dashboard Performance Pill-->
+    <dimen name="dashboard_performance_pill_value_text_size">26sp</dimen>
+    <dimen name="dashboard_performance_pill_key_text_size">17sp</dimen>
+    <dimen name="dashboard_performance_pill_layout_margin_left">24dp</dimen>
+    <dimen name="dashboard_performance_pill_value_width">44dp</dimen>
+    <dimen name="dashboard_performance_pill_value_margin_left">20dp</dimen>
+    <dimen name="dashboard_performance_pill_value_margin_right">5dp</dimen>
+    <dimen name="dashboard_performance_pill_key_margin_right">12dp</dimen>
+    <dimen name="dashboard_performance_pill_icon_width">9dp</dimen>
+    <dimen name="dashboard_performance_pill_icon_height">18dp</dimen>
+    <dimen name="dashboard_performance_pill_icon_margin_right">40dp</dimen>
+
+    <!-- FT Dashboard Notifications-->
+    <dimen name="dashboard_notification_button_text_size">16sp</dimen>
+    <dimen name="dashboard_notification_layout_margin">20dp</dimen>
+
+    <dimen name="dashboard_notification_header_text_size">15sp</dimen>
+    <dimen name="dashboard_notification_date_text_size">14sp</dimen>
+    <dimen name="dashboard_notification_notif_detail_text_size">15sp</dimen>
+    <dimen name="dashboard_notification_notif_detail_padding_top">8dp</dimen>
+    <dimen name="dashboard_notification_frame_layout_padding_top">10dp</dimen>
+    <dimen name="dashboard_notification_frame_layout_padding_left">3dp</dimen>
+    <dimen name="dashboard_notification_frame_layout_padding_right">3dp</dimen>
+    <dimen name="dashboard_notification_frame_layout_margin_right">15dp</dimen>
+    <dimen name="dashboard_notification_item_padding_top">10dp</dimen>
+    <dimen name="dashboard_notif_icon_border_width">4dp</dimen>
+    <dimen name="dashboard_notif_icon_size">46dp</dimen>
+</resources>

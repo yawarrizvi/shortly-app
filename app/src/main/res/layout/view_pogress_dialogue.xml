@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:id="@+id/progress_dialogue_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/progress_view_layout_margin"
+        android:background="@color/progress_dialogue_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/progress_dialogue_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/progress_view_top_margin"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/progress_view_title_text_size" />
+
+        <TextView
+            android:id="@+id/progress_dialogue_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/progress_view_top_margin"
+            android:gravity="center_horizontal"
+            android:lines="2"
+            android:textColor="@color/caption"
+            android:textSize="@dimen/progress_view_message_text_size" />
+
+
+        <fr.castorflex.android.circularprogressbar.CircularProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/smoothProgressBar"
+            android:layout_width="@dimen/circular_progress_bar_size"
+            android:layout_height="@dimen/circular_progress_bar_size"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/progress_view_top_margin"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:cpb_color="@color/caption"
+            app:cpb_max_sweep_angle="350"
+            app:cpb_min_sweep_angle="10"
+            app:cpb_rotation_speed="1.0"
+            app:cpb_stroke_width="4dp"
+            app:cpb_sweep_speed="1.0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/progress_view_top_margin"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/progress_dialogue_button_negative"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/progress_view_button_height"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/progress_view_layout_margin"
+                android:layout_weight="1"
+                android:background="@color/progress_dialogue_neg_btn_bg_colour"
+                android:padding="0dp"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/progress_dialogue_button_text_colour"
+                android:textSize="@dimen/progress_view_button_text_size" />
+
+            <Button
+                android:id="@+id/progress_dialogue_button_positve"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/progress_view_button_height"
+                android:layout_gravity="left"
+                android:layout_margin="@dimen/progress_view_layout_margin"
+                android:layout_weight="1"
+                android:background="@color/progress_dialogue_pos_btn_bg_colour"
+                android:padding="0dp"
+                android:text="Retry"
+                android:textAllCaps="false"
+                android:textColor="@color/progress_dialogue_button_text_colour"
+                android:textSize="@dimen/progress_view_button_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
