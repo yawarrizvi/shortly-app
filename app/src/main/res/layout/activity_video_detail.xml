@@ -29,15 +29,73 @@
         android:id="@+id/video_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#000"
         android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/img_view_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+
+            <ImageView
+                android:id="@+id/img_view_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:id="@+id/layout_movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginBottom="50dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:lines="2"
+                    android:text="Just Another Love Story"
+                    android:textColor="#FFF"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="DRAMA, LOVE, 30 MIN"
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STORYLINE"
+            android:textColor="@color/primary_text_color"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:layout_margin="15dp"
+            android:text="This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. "/>
+
+        <LinearLayout
+            android:id="@+id/layout_action_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

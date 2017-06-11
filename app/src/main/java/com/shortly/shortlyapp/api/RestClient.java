@@ -5,6 +5,7 @@ import com.shortly.shortlyapp.model.DefaultDTO;
 import com.shortly.shortlyapp.model.GenreListDTO;
 import com.shortly.shortlyapp.model.LoginResponseDTO;
 import com.shortly.shortlyapp.model.MostViewedListDTO;
+import com.shortly.shortlyapp.model.SearchDTO;
 import com.shortly.shortlyapp.model.VideoDetailDTO;
 import com.shortly.shortlyapp.utils.WebUrls;
 
@@ -130,6 +131,13 @@ public class RestClient {
                 "Accept:application/json"
         })
         Call<DefaultDTO> likeVideo(@Header("X-Authentication-Token") String authToken, @Body HashMap<String, Object> requestParameters);
+
+        @POST("api/video/search")
+        @Headers({
+                "Accept:application/json"
+        })
+        Call<SearchDTO> searchVideo(@Header("X-Authentication-Token") String authToken, @Body HashMap<String, Object> requestParameters);
+
 
         @POST("api/categories/list")
         @Headers({

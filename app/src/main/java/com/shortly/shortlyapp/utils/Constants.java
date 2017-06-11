@@ -15,6 +15,9 @@ public class Constants {
     public static final String KEY_TIME_PLAYED = "time_played";
     public static final String KEY_PAGE = "page";
     public static final String KEY_Id = "id";
+    public static final String KEY_KEYWORD = "keyword";
+    public static final String KEY_CATEGORY = "category";
+    public static final String KEY_DURATION = "durationId";
 
 
     public interface ProgressBarStyles {
