@@ -17,9 +17,11 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.UI.Activities.ItemFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
+import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 
-public class ShortlyTabViewActivity extends AppCompatActivity {
+public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -67,8 +69,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+                startActivity(intent);*/
             }
 
             @Override
@@ -105,6 +107,11 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 
     /**
@@ -156,7 +163,12 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if(position == 1){
+                return ItemFragment.newInstance(2);
+            } else {
+                return PlaceholderFragment.newInstance(position + 1);
+            }
+
         }
 
         @Override
