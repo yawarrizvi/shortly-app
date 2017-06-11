@@ -21,7 +21,7 @@ public class SignUpResponse {
     private String createdAt;
     private String updatedAt;
     private Integer status;
-    private String apiToken;
+    private String api_token;
 
     public Integer getUserId() {
         return userId;
@@ -151,11 +151,11 @@ public class SignUpResponse {
         this.status = status;
     }
 
-    public String getApiToken() {
-        return apiToken;
+    public String getApi_token() {
+        return api_token;
     }
 
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
+    public void setApi_token(String api_token) {
+        this.api_token = api_token;
     }
 }

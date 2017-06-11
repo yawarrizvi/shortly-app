@@ -13,7 +13,7 @@ import com.shortly.shortlyapp.model.GenreListResponse;
 import com.shortly.shortlyapp.model.LoginResponse;
 import com.shortly.shortlyapp.model.LoginResponseDTO;
 import com.shortly.shortlyapp.model.MostViewedListDTO;
-import com.shortly.shortlyapp.model.MostViewedListResponse;
+import com.shortly.shortlyapp.model.SearchDTO;
 import com.shortly.shortlyapp.model.VideoDetailDTO;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.utils.Constants;
@@ -158,7 +158,7 @@ public class APICalls {
                         if (mostViewedListDTO != null) {
                             status = mostViewedListDTO.getMeta().getStatus();
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
-                                List<MostViewedListResponse> genreResponseList = mostViewedListDTO.getResponse();
+                                List<VideoDetailResponse> genreResponseList = mostViewedListDTO.getResponse();
                                 mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, genreResponseList);
                             } else {
                                 stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR);
@@ -170,6 +170,59 @@ public class APICalls {
                 }
                 @Override
                 public void onFailure(Call<MostViewedListDTO> call, Throwable t) {
+                    // there is more than just a failing request (like: no internet connection)
+                    stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE);
+                }
+            });
+        }
+    }
+
+    public static void fetchSearchResults(final String query, final int categoryId, final int durationId, final Context context) {
+        if (!NetworkManager.isConnected(context)) {
+            stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
+        } else {
+
+            Prefs prefs = Prefs.getInstance(context);
+            String authToken = prefs.getAuthenticationToken();
+            HashMap<String, Object> requestParameters = new HashMap<>();
+            if (!query.isEmpty()) {
+                requestParameters.put(Constants.KEY_KEYWORD, query);
+            }
+
+            if (categoryId != -1) {
+                requestParameters.put(Constants.KEY_CATEGORY, categoryId);
+            }
+
+            if (durationId != -1) {
+                requestParameters.put(Constants.KEY_DURATION, durationId);
+            }
+
+
+            RestClient.ShortlyApiInterface service = RestClient.getShortlyClient(WebUrls.SERVICE_NAME);
+            Call<SearchDTO> searchCall = service.searchVideo((authToken), requestParameters);
+            searchCall.enqueue(new Callback<SearchDTO>() {
+                @Override
+                public void onResponse(Call<SearchDTO> call, Response<SearchDTO> response) {
+                    if (response.isSuccessful()) {
+                        SearchDTO videoDetailDTO = response.body();
+                        int status = 0;
+                        if (videoDetailDTO != null) {
+                            status = videoDetailDTO.getMeta().getStatus();
+                            if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
+                                List<VideoDetailResponse> detailResponseList = videoDetailDTO.getResponse();
+
+                                mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, detailResponseList);
+                            } else {
+                                stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR);
+                            }
+                        }
+                    } else {
+                        stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SearchDTO> call, Throwable t) {
                     // there is more than just a failing request (like: no internet connection)
                     stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE);
                 }
@@ -444,7 +497,7 @@ public class APICalls {
                         if (mostViewedListDTO != null) {
                             status = mostViewedListDTO.getMeta().getStatus();
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
-                                List<MostViewedListResponse> genreResponseList = mostViewedListDTO.getResponse();
+                                List<VideoDetailResponse> genreResponseList = mostViewedListDTO.getResponse();
                                 mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, genreResponseList);
                             } else {
                                 stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR);

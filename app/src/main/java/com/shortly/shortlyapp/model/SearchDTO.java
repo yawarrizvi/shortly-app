@@ -3,10 +3,11 @@ package com.shortly.shortlyapp.model;
 import java.util.List;
 
 /**
- * Created by yarizvi on 07/06/2017.
+ * Created by yarizvi on 11/06/2017.
  */
 
-public class MostViewedListDTO {
+public class SearchDTO {
+
     private Meta meta;
     private List<VideoDetailResponse> response = null;
 
@@ -26,3 +27,4 @@ public class MostViewedListDTO {
         this.response = response;
     }
 }
+

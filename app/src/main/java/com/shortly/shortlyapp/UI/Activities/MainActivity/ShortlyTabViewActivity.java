@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +17,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.shortly.shortlyapp.Interfaces.SyncInterface;
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
+import com.shortly.shortlyapp.model.VideoDetailResponse;
+import com.shortly.shortlyapp.utils.Constants;
+
+import java.util.List;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 
 public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
@@ -69,8 +76,12 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                /*Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-                startActivity(intent);*/
+                if (tab.getPosition() == 1) {
+                    searchData();
+                } else {
+                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -86,7 +97,36 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
     }
 
+    private void searchData() {
 
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                List<VideoDetailResponse> resultData = (List<VideoDetailResponse>) resultObject;
+                                Log.v("","Search Complete");
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                });
+                APICalls.fetchSearchResults("", -1, -1, ShortlyTabViewActivity.this);
+            }
+
+
+        }.start();
+    }
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
