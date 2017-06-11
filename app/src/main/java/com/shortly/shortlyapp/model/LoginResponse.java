@@ -18,10 +18,10 @@ public class LoginResponse {
     private Object image;
     private Integer autoPlay;
     private Integer videoPrivacy;
-    private String createdAt;
-    private String updatedAt;
+    private String created_at;
+    private String updated_at;
     private Integer status;
-    private String apiToken;
+    private String api_token;
 
     public Integer getUserId() {
         return userId;
@@ -119,20 +119,20 @@ public class LoginResponse {
         this.videoPrivacy = videoPrivacy;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 
     public Integer getStatus() {
@@ -143,11 +143,11 @@ public class LoginResponse {
         this.status = status;
     }
 
-    public String getApiToken() {
-        return apiToken;
+    public String getApi_token() {
+        return api_token;
     }
 
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
+    public void setApi_token(String api_token) {
+        this.api_token = api_token;
     }
 }

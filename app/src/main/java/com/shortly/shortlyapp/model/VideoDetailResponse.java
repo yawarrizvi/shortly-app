@@ -20,15 +20,24 @@ public class VideoDetailResponse {
     private Integer type;
     private Object dateTime;
     private Integer status;
-    private String createdAt;
-    private String updatedAt;
+    private String created_at;
+    private String updated_at;
     private Integer viewsCount;
     private Integer totalVideos;
     private Boolean liked;
     private Boolean later;
     private Boolean playlist;
     private String category;
-//    private User user;
+    private String thumbnails;
+
+
+    public String getThumbnails() {
+        return thumbnails;
+    }
+
+    public void setThumbnails(String thumbnails) {
+        this.thumbnails = thumbnails;
+    }
 
     public Integer getVideoId() {
         return videoId;
@@ -150,20 +159,20 @@ public class VideoDetailResponse {
         this.status = status;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 
     public Integer getViewsCount() {

@@ -17,6 +17,8 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -86,72 +88,64 @@ public class RestClient {
     public interface ShortlyApiInterface {
         @POST("api/users/login")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<LoginResponseDTO> authenticateUser(@Body HashMap<String, Object> loginInfo);
 
         @POST("api/users/signup")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<LoginResponseDTO> registerUser(@Body HashMap<String, Object> loginInfo);
 
 
-        @POST("watch/video/{videoID}")
+        @FormUrlEncoded
+        @POST("api/watch/video")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+//                "Accept:application/json",
+                "Content-Type: application/x-www-form-urlencoded"
         })
-        Call<VideoDetailDTO> fetchVideoDetail(@Header("X-Authentication-Token") String authToken, @Path("videoID") int videoID);
+        Call<VideoDetailDTO> fetchVideoDetail(@Header("X-Authentication-Token") String authToken, @Field("id") int videoID);
 
         @POST("watch/video/{timePlayed}/{VideoId}")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<DefaultDTO> pushVideoPlayedTime(@Header("X-Authentication-Token") String authToken, @Path("timePlayed") int timePlayed, @Path("VideoId") int videoID);
 
         @POST("watch/video/{userId}/{VideoId}")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<DefaultDTO> pushVideoEnd(@Header("X-Authentication-Token") String authToken, @Path("userId") int userId, @Path("VideoId") int videoID);
 
         @POST("later/video/end")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<DefaultDTO> addVideoToWatchLater(@Header("X-Authentication-Token") String authToken, @Body HashMap<String, Object> requestParameters);
 
         @POST("api/like/video")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<DefaultDTO> likeVideo(@Header("X-Authentication-Token") String authToken, @Body HashMap<String, Object> requestParameters);
 
         @POST("api/categories/list")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<GenreListDTO> getGenreList(@Header("X-Authentication-Token") String authToken);
 
         @POST("api/recent/videos")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<MostViewedListDTO> getMostViewedVideos(@Header("X-Authentication-Token") String authToken);
 
         @POST("/api/featured/videos")
         @Headers({
-                "Accept:application/json",
-                "Content-Type:text/plain; charset=utf-8"
+                "Accept:application/json"
         })
         Call<MostViewedListDTO> getFeaturedVideos(@Header("X-Authentication-Token") String authToken);
 

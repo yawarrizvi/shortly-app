@@ -14,7 +14,7 @@ public class DataPersistence {
 
     public static void setUserDetailsInSharedPreferences(LoginResponse user, String password, Context context) {
         Prefs pref = Prefs.getInstance(context);
-        pref.putAuthenticationToken(user.getApiToken());
+        pref.putAuthenticationToken(user.getApi_token());
         pref.putUserEmail(user.getEmail());
         pref.putEncryptedPassword(password);
         pref.putUserId(user.getUserId());

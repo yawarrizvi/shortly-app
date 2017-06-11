@@ -1,8 +1,7 @@
 package com.shortly.shortlyapp.UI.Activities.MainActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 
 public class ShortlyTabViewActivity extends AppCompatActivity {
 
@@ -37,6 +38,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shortly_tab_view);
 
@@ -47,10 +50,11 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_done_circle));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_error_circle));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_not_acceptable_selected));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_check_box_selected));
+        tabLayout.setSelectedTabIndicatorHeight(0);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_list));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_search));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_watch_later));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_settings));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 
@@ -63,6 +67,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+                startActivity(intent);
             }
 
             @Override
@@ -73,16 +79,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 

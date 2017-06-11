@@ -33,6 +33,7 @@
         <activity
             android:name=".UI.Activities.MainActivity.ShortlyTabViewActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Activities.Login.LoginActivity"
@@ -42,6 +43,12 @@
         <activity
             android:name=".UI.Activities.Login.RegisterActivity"
             android:label="@string/title_activity_register"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UI.Activities.VideoDetail.VideoDetailActivity"
+            android:label="@string/title_activity_video_detail"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

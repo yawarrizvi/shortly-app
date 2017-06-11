@@ -87,14 +87,14 @@ public class APICalls {
         }
     }
 
-    public static void registerUser(final String username, final String password, final Context context) {
+    public static void registerUser(final String username, final String password, final String confirmPassword, final Context context) {
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
             HashMap<String, Object> requestParameters = new HashMap<>();
             requestParameters.put(Constants.KEY_EMAIL, username);
             requestParameters.put(Constants.KEY_PASSWORD, password);
-            requestParameters.put(Constants.KEY_CONFIRM_PASSWORD, password);
+            requestParameters.put(Constants.KEY_CONFIRM_PASSWORD, confirmPassword);
 
             RestClient.ShortlyApiInterface service = RestClient.getShortlyClient(WebUrls.SERVICE_NAME);
             Call<LoginResponseDTO> employeeCall = service.registerUser(requestParameters);
@@ -184,7 +184,9 @@ public class APICalls {
 
             Prefs prefs = Prefs.getInstance(context);
             String authToken = prefs.getAuthenticationToken();
-            HashMap<String, String> requestParameters = new HashMap<>();
+            HashMap<String, Object> requestParameters = new HashMap<>();
+
+            requestParameters.put(Constants.KEY_Id, videoId);
             RestClient.ShortlyApiInterface service = RestClient.getShortlyClient(WebUrls.SERVICE_NAME);
             Call<VideoDetailDTO> videoDetailCall = service.fetchVideoDetail((authToken), videoId);
             videoDetailCall.enqueue(new Callback<VideoDetailDTO>() {
@@ -198,7 +200,7 @@ public class APICalls {
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
                                 List<VideoDetailResponse> detailResponseList = videoDetailDTO.getResponse();
                                 VideoDetailResponse detailResponse = null;
-                                if (detailResponseList != null && detailResponseList.size() < 0) {
+                                if (detailResponseList != null && detailResponseList.size() > 0) {
                                     detailResponse = detailResponseList.get(0);
                                 }
                                 mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, detailResponse);

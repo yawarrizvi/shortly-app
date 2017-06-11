@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity">
+
+    <LinearLayout
+        android:id="@+id/empty_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No data available. \n Please try again later!"
+            android:textAlignment="center"
+            android:textColor="@color/primary_text_color"
+            android:textSize="@dimen/login_button_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/video_detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/img_view_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

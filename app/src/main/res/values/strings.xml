@@ -34,4 +34,14 @@
     <string name="key_error_no_connectivity">No internet connectivity.</string>
     <string name="button_title_ok">OK</string>
     <string name="title_activity_register">" "</string>
+    <string name="title_activity_video_detail">Info</string>
+
+    <!--Date keys-->
+    <string name="key_string_day">day</string>
+    <string name="key_string_days">days</string>
+    <string name="key_string_hr">hr</string>
+    <string name="key_string_hrs">hrs</string>
+    <string name="key_string_min">min</string>
+    <string name="key_string_mins">mins</string>
+    <string name="key_string_second">s</string>
 </resources>

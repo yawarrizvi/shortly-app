@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shortly.shortlyapp.BuildConfig;
 import com.shortly.shortlyapp.Interfaces.ProgressLoaderInterface;
@@ -24,7 +23,7 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.BaseActivity;
-import com.shortly.shortlyapp.UI.Activities.MainActivity.MainActivity;
+import com.shortly.shortlyapp.UI.Activities.MainActivity.ShortlyTabViewActivity;
 import com.shortly.shortlyapp.utils.Constants;
 import com.shortly.shortlyapp.utils.Utilities;
 
@@ -38,8 +37,8 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
     @Bind(R.id.btn_login)
     Button mBtnLogin;
 
-    @Bind(R.id.btn_forgot_password)
-    Button mBtnForgotPassword;
+    @Bind(R.id.btn_register)
+    Button mBtnRegister;
 
     @Bind(R.id.input_layout_email)
     TextInputLayout mInputLayoutEmail;
@@ -55,7 +54,6 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         toggleLoginButton(true);
@@ -68,8 +66,11 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
         mEditTextPassword = mInputLayoutPassword.getEditText();
 
         if (BuildConfig.DEBUG) {
-            mEditTextEmail.setText("shortlytest@gmail.com");
-            mEditTextPassword.setText("shortly1234");
+//            mEditTextEmail.setText("shortlytest@gmail.com");
+//            mEditTextPassword.setText("shortly1234");
+//
+            mEditTextEmail.setText("asi589@gmail.com");
+            mEditTextPassword.setText("qwerty123");
         }
 
         mEditTextPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -96,10 +97,10 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
             }
         });
 
-        mBtnForgotPassword.setOnClickListener(new View.OnClickListener() {
+        mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mActivity, "Forgot Password", Toast.LENGTH_SHORT).show();
+                registerUser();
             }
         });
 
@@ -120,6 +121,11 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
                 }
             }
         });
+    }
+
+    private void registerUser() {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
     }
 
     private void performLogin() {
@@ -225,7 +231,7 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
     }
 
     private void showVideoList() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ShortlyTabViewActivity.class);
         startActivity(intent);
         finish();
     }
