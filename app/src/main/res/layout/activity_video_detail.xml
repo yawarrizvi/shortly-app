@@ -54,7 +54,7 @@
                     android:id="@+id/title"
                     android:layout_width="280dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:lines="2"
                     android:text="Just Another Love Story"
                     android:textColor="#FFF"
@@ -64,7 +64,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     android:text="DRAMA, LOVE, 30 MIN"
                     android:textColor="@color/secondary_text_color"
@@ -75,15 +75,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:text="STORYLINE"
             android:textColor="@color/primary_text_color"
             android:textSize="14sp" />
+
         <TextView
+            android:id="@+id/video_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
             android:layout_margin="15dp"
-            android:text="This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. "/>
+            android:text="This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. "
+            android:textColor="#FFF" />
 
         <LinearLayout
             android:id="@+id/layout_action_buttons"
