@@ -36,6 +36,7 @@ public class WatchLaterRecyclerViewAdapter extends RecyclerView.Adapter<WatchLat
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        //TODO: get data by position and load in cell
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
@@ -58,6 +59,7 @@ public class WatchLaterRecyclerViewAdapter extends RecyclerView.Adapter<WatchLat
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        //TODO: set ids in layout and cast here and set data.
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;

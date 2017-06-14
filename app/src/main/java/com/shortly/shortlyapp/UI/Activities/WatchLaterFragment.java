@@ -70,6 +70,8 @@ public class WatchLaterFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
+            //TODO: pass data here from api
             recyclerView.setAdapter(new WatchLaterRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
