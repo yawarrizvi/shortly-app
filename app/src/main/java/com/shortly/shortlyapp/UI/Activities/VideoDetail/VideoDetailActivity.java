@@ -73,6 +73,7 @@ public class VideoDetailActivity extends BaseActivity {
 
         //get video id from intent
         mVideoId = 1;
+        mVideoDetailLayout.setVisibility(View.GONE);
         fetchVideoDetails();
         mImageViewThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +139,7 @@ public class VideoDetailActivity extends BaseActivity {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                showError(result);
                                 showEmptyView();
                                 break;
                             default:
@@ -267,7 +269,7 @@ public class VideoDetailActivity extends BaseActivity {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                showResponse("An error occurred. Please try again");
+                                showError(result);
                                 break;
                             default:
                                 ProgressHandler.hideProgressDialogue();
@@ -279,6 +281,35 @@ public class VideoDetailActivity extends BaseActivity {
                 APICalls.addVideoToWatchLater(mVideoId, mVideoPlayTime, VideoDetailActivity.this);
             }
         }.start();
+    }
+
+    private void showError(int errorType) {
+        final String message;
+        switch (errorType) {
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                message = getString(R.string.key_error_no_connectivity);
+                break;
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                message = getString(R.string.key_error_service_failure);
+                break;
+            default:
+                message = getString(R.string.key_error_service_failure);
+                break;
+        }
+
+        Thread timerThread = new Thread() {
+            public void run() {
+                try {
+                    sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    ProgressHandler.upDateProgressDialog(VideoDetailActivity.this, "", message, 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
+                }
+            }
+        };
+        timerThread.start();
     }
 
     private void setButtonConfig() {

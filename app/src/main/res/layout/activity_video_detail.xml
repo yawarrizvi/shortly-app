@@ -57,7 +57,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:lines="2"
-                    android:text="Just Another Love Story"
                     android:textColor="#FFF"
                     android:textSize="40sp"
                     android:textStyle="bold" />
@@ -68,7 +67,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="DRAMA, LOVE, 30 MIN"
                     android:textColor="@color/secondary_text_color"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -88,7 +86,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. "
             android:textColor="#FFF" />
 
         <TextView

@@ -266,10 +266,7 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
             }
         };
         timerThread.start();
-//        ProgressHandler.upDateProgressDialog(this, "", message, 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
-//        ProgressHandler.showProgressDialog(this, getString(R.string.app_name), getString(R.string.key_authentication_title), 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
     }
-
 
     private void toggleLoginButton(final boolean enabled) {
         Handler mainHandler = new Handler(this.getMainLooper());
