@@ -21,6 +21,8 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
+import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
+import com.shortly.shortlyapp.UI.Activities.WatchLaterFragment;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
@@ -28,7 +30,7 @@ import com.shortly.shortlyapp.utils.Constants;
 
 import java.util.List;
 
-public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -268,41 +270,49 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 1) {
-                return ItemFragment.newInstance(2);
-            } else {
-                return PlaceholderFragment.newInstance(position + 1);
+            public SectionsPagerAdapter(FragmentManager fm) {
+                super(fm);
             }
 
-        }
+            @Override
+            public Fragment getItem(int position) {
+                // getItem is called to instantiate the fragment for the given page.
+                // Return a PlaceholderFragment (defined as a static inner class below).
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 4;
-        }
+                if (position == 0) {
+                    return VideoListFragment.newInstance(1);
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-                case 3:
-                    return "SECTION 4";
+                } else if (position == 1) {
+                    return ItemFragment.newInstance(2);
+
+                } else if (position == 2) {
+
+                    return WatchLaterFragment.newInstance(1);
+                }else {
+                    return PlaceholderFragment.newInstance(position + 1);
+                }
+
             }
-            return null;
-        }
+
+            @Override
+            public int getCount() {
+                // Show 3 total pages.
+                return 4;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                switch (position) {
+                    case 0:
+                        return "SECTION 1";
+                    case 1:
+                        return "SECTION 2";
+                    case 2:
+                        return "SECTION 3";
+                    case 3:
+                        return "SECTION 4";
+                }
+                return null;
+            }
     }
 }
