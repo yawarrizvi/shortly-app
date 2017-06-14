@@ -26,7 +26,7 @@ import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
@@ -50,8 +50,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     private int mWatchLaterPageNumber = 1;
 
     List<WatchLaterResponse> mWatchLaterList;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +85,10 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                 int tabPosition = tab.getPosition();
                 mViewPager.setCurrentItem(tabPosition, false);
                 if (tabPosition == 0) {
-                    searchData();
-                } else if (tabPosition == 1) {
-                    //get video list
                     getVideoList();
+                } else if (tabPosition == 1) {
+                    searchData();
                 } else if (tabPosition == 2) {
-                    //get watch later videos
                     getWatchLaterList();
                 } else {
 //                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
@@ -121,7 +117,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                HashMap<String, Object> videoListData = (HashMap<String, Object>) resultObject;
+                                ArrayList<Object> videoListData = (ArrayList<Object>) resultObject;
                                 Log.v("", "Video List Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -137,15 +133,15 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     }
                 });
                 APICalls.getFirstVideoData(mVideoListPageNumber, ShortlyTabViewActivity.this);
-
             }
-
 
         }.start();
     }
 
     private void getWatchLaterList() {
-        ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+        if (mWatchLaterList != null && mWatchLaterList.size() == 0) {
+            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+        }
         new Thread() {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {

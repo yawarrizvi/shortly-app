@@ -24,6 +24,7 @@ import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
 import com.shortly.shortlyapp.utils.WebUrls;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class APICalls {
             Prefs prefs = Prefs.getInstance(context);
             String authToken = prefs.getAuthenticationToken();
             RestClient.ShortlyApiInterface service = RestClient.getShortlyClient(WebUrls.SERVICE_NAME);
-            final HashMap<String, Object> videoListResult = new HashMap<>();
+            final ArrayList<Object> videoListResult = new ArrayList<>();
             Call<MostViewedListDTO> getMostViewedVideosCall = service.getFirstVideo(authToken);
             getMostViewedVideosCall.enqueue(new Callback<MostViewedListDTO>() {
                 @Override
@@ -164,7 +165,8 @@ public class APICalls {
                                 if (responseList != null && responseList.size() > 0) {
                                     firstCellData = responseList.get(0);
                                 }
-                                videoListResult.put("firstCell", firstCellData);
+                                videoListResult.add(0, firstCellData);
+
                                 getHorizontalScrollerData(pageNumber, videoListResult, context);
 //                                mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, responseList, 0);
 
@@ -187,7 +189,7 @@ public class APICalls {
     }
 
     //Top Cell Data horizontal scroller
-    public static void getHorizontalScrollerData(final int pageNumber, final HashMap<String, Object> videoListResult, final Context context) {
+    public static void getHorizontalScrollerData(final int pageNumber, final ArrayList<Object> videoListResult, final Context context) {
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
@@ -205,7 +207,7 @@ public class APICalls {
                             status = mostViewedListDTO.getMeta().getStatus();
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
                                 List<VideoDetailResponse> scrollerList = mostViewedListDTO.getResponse();
-                                videoListResult.put("scrollerList", scrollerList);
+                                videoListResult.add(1, scrollerList);
                                 getVideoList(pageNumber, videoListResult, context);
 
 //                                mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, scrollerList, 0);
@@ -227,7 +229,7 @@ public class APICalls {
         }
     }
 
-    public static void getVideoList(final int pageNumber, final HashMap<String, Object> videoListResult, final Context context) {
+    public static void getVideoList(final int pageNumber, final ArrayList<Object> videoListResult, final Context context) {
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
@@ -247,7 +249,7 @@ public class APICalls {
                             int totalRecords = responseMeta.getTotal();
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
                                 List<VideoDetailResponse> videoList = mostViewedListDTO.getResponse();
-                                videoListResult.put("videoList", videoList);
+                                videoListResult.addAll(videoList);
                                 mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, videoListResult, totalRecords);
                             } else {
                                 stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR);
