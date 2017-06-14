@@ -5,35 +5,147 @@ package com.shortly.shortlyapp.model;
  */
 
 public class WatchLaterResponse {
-    private Integer categoryId;
-    private String name;
-    private String dateTime;
+    private Integer videoId;
+    private Integer userId;
+    private Object categoryId;
+    private String title;
+    private String description;
+    private String tags;
+    private String casts;
+    private Object format;
+    private Integer duration;
+    private String thumbnails;
+    private String path;
+    private Integer license;
+    private Integer isFeatured;
+    private Integer type;
+    private Object dateTime;
     private Integer status;
-    private Integer order;
-    private Object createdAt;
-    private Object updatedAt;
+    private String createdAt;
+    private String updatedAt;
+    private String jobId;
+    private String videoLink;
+    private Object allowCountry;
+    private Boolean later;
+    private Integer time;
 
-    public Integer getCategoryId() {
+    public Integer getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Integer videoId) {
+        this.videoId = videoId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Object getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Object categoryId) {
         this.categoryId = categoryId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getDateTime() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getCasts() {
+        return casts;
+    }
+
+    public void setCasts(String casts) {
+        this.casts = casts;
+    }
+
+    public Object getFormat() {
+        return format;
+    }
+
+    public void setFormat(Object format) {
+        this.format = format;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public String getThumbnails() {
+        return thumbnails;
+    }
+
+    public void setThumbnails(String thumbnails) {
+        this.thumbnails = thumbnails;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getLicense() {
+        return license;
+    }
+
+    public void setLicense(Integer license) {
+        this.license = license;
+    }
+
+    public Integer getIsFeatured() {
+        return isFeatured;
+    }
+
+    public void setIsFeatured(Integer isFeatured) {
+        this.isFeatured = isFeatured;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Object getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Object dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -45,27 +157,59 @@ public class WatchLaterResponse {
         this.status = status;
     }
 
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    public Object getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Object createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Object getUpdatedAt() {
+    public String getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Object updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getVideoLink() {
+        return videoLink;
+    }
+
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
+    }
+
+    public Object getAllowCountry() {
+        return allowCountry;
+    }
+
+    public void setAllowCountry(Object allowCountry) {
+        this.allowCountry = allowCountry;
+    }
+
+    public Boolean getLater() {
+        return later;
+    }
+
+    public void setLater(Boolean later) {
+        this.later = later;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 }

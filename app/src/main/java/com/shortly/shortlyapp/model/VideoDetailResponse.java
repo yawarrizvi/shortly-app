@@ -29,7 +29,15 @@ public class VideoDetailResponse {
     private Boolean playlist;
     private String category;
     private String thumbnails;
+    private int time;
 
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 
     public String getThumbnails() {
         return thumbnails;

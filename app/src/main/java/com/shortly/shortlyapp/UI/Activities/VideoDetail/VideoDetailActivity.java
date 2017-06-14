@@ -95,9 +95,7 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
     public void onPause() {
-        mVideoPlayTime = mVideoPlayerView.getCurrentTime();
         super.onPause();
-
     }
 
     @Override
@@ -110,20 +108,20 @@ public class VideoDetailActivity extends BaseActivity {
 //        }
 //        videoPlayerView.setCurrentTime(50);
 //        videoPlayerView.play();
-
-
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
-//            mVideoPlayTime = mVideoPlayerView.getCurrentTime();
-//            mVideoPlayerView.stop();
-//        } else {
-//            super.onBackPressed();
-//        }
-//
-//    }
+    //    @Override
+    public void onBackPressed() {
+        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
+            mVideoPlayTime = mVideoPlayerView.getCurrentTime();
+            mVideoPlayerView.stop();
+            mVideoDetailLayout.setVisibility(View.VISIBLE);
+            mEmptyViewLayout.setVisibility(View.GONE);
+            mVideoPlayerView.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private void fetchVideoDetails() {
         ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
@@ -156,7 +154,6 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
     private void showEmptyView() {
-
         mVideoDetailLayout.setVisibility(View.GONE);
         mEmptyViewLayout.setVisibility(View.VISIBLE);
 //        ProgressHandler.hideProgressDialogue();
@@ -168,15 +165,8 @@ public class VideoDetailActivity extends BaseActivity {
             mVideoDetail = (VideoDetailResponse) resultObject;
             mIsVideoLiked = mVideoDetail.getLiked();
             mIsWatchLater = mVideoDetail.getLater();
-
-
-            if (mIsVideoLiked) {
-                mLikeButton.setSelected(true);
-            }
-
-            if (mIsWatchLater) {
-                mWatchLaterButton.setSelected(true);
-            }
+            mVideoPlayTime = mVideoDetail.getTime();
+            setButtonConfig();
 
             String title = mVideoDetail.getTitle();
             String casts = mVideoDetail.getCasts();
@@ -209,7 +199,6 @@ public class VideoDetailActivity extends BaseActivity {
             ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
             mVideoPlayerView.playVideo();
         }
-
     }
 
     private void likeVideo() {
@@ -223,6 +212,7 @@ public class VideoDetailActivity extends BaseActivity {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                     showResponse("Video Liked!");
+                                    mLikeButton.setPressed(true);
                                     break;
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
@@ -234,6 +224,7 @@ public class VideoDetailActivity extends BaseActivity {
                                     ProgressHandler.hideProgressDialogue();
                                     break;
                             }
+                            setButtonConfig();
                         }
                     });
                     APICalls.likeVideo(mVideoId, VideoDetailActivity.this);
@@ -241,9 +232,8 @@ public class VideoDetailActivity extends BaseActivity {
 
 
             }.start();
-
-            mLikeButton.setSelected(true);
         }
+        setButtonConfig();
     }
 
     private void showResponse(final String message) {
@@ -271,6 +261,7 @@ public class VideoDetailActivity extends BaseActivity {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 showResponse("Video added to watch later list!");
+                                mWatchLaterButton.setPressed(true);
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
@@ -282,13 +273,16 @@ public class VideoDetailActivity extends BaseActivity {
                                 ProgressHandler.hideProgressDialogue();
                                 break;
                         }
+                        setButtonConfig();
                     }
                 });
                 APICalls.addVideoToWatchLater(mVideoId, mVideoPlayTime, VideoDetailActivity.this);
             }
-
-
         }.start();
-        mWatchLaterButton.setSelected(true);
+    }
+
+    private void setButtonConfig() {
+        mLikeButton.setPressed(mVideoDetail.getLiked());
+        mWatchLaterButton.setPressed(mVideoDetail.getLater());
     }
 }

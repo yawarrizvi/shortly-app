@@ -26,6 +26,7 @@ import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
@@ -81,9 +82,9 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             public void onTabSelected(TabLayout.Tab tab) {
                 int tabPosition = tab.getPosition();
                 mViewPager.setCurrentItem(tabPosition);
-                if (tabPosition == 1) {
+                if (tabPosition == 0) {
                     searchData();
-                } else if (tabPosition == 0) {
+                } else if (tabPosition == 1) {
                     //get video list
                     getVideoList();
                 } else if (tabPosition == 2) {
@@ -116,7 +117,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
+                                HashMap<String, Object> videoListData = (HashMap<String, Object>) resultObject;
                                 Log.v("", "Video List Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
