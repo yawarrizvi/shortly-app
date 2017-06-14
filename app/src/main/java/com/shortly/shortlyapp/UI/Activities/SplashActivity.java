@@ -21,7 +21,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         mIsBackPressed = false;
 
-        Log.v("","-----------------------------------");
+        Log.v("", "-----------------------------------");
 
         /*final int mAppServerVersion =  Prefs.getInstance(this).getAppServerVersion(0);
         final int mIsUpdateAvailable =  Utilities.updateRequired(mAppServerVersion);
@@ -52,6 +52,7 @@ public class SplashActivity extends BaseActivity {
                     if (!mIsBackPressed) {
 //                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                         Intent intent = new Intent(SplashActivity.this, ShortlyTabViewActivity.class);
+
                         startActivity(intent);
                     }
                 }

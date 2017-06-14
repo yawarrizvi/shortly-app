@@ -73,7 +73,7 @@ public class RegisterActivity extends BaseActivity {
         mEditTextConfirmPassword = mInputLayoutConfirmPassword.getEditText();
 
         if (BuildConfig.DEBUG) {
-            mEditTextEmail.setText("shortlytest@gmail.com");
+            mEditTextEmail.setText("shortlytest12@gmail.com");
             mEditTextPassword.setText("shortly1234");
             mEditTextConfirmPassword.setText("shortly1234");
         }
@@ -82,7 +82,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || actionId == EditorInfo.IME_ACTION_DONE) {
-                    performRegisteration();
+                    performRegistration();
                 }
                 return false;
             }
@@ -105,7 +105,7 @@ public class RegisterActivity extends BaseActivity {
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performRegisteration();
+                performRegistration();
             }
         });
 
@@ -128,7 +128,7 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    private void performRegisteration() {
+    private void performRegistration() {
         if (mEditTextEmail != null && mEditTextPassword != null) {
             toggleLoginButton(false);
             String email = mEditTextEmail.getText().toString();

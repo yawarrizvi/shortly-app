@@ -7,7 +7,6 @@ package com.shortly.shortlyapp.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -30,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.tasks.GetVideoFirstFrameTask;
 
@@ -411,6 +411,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
                 mHandler.postDelayed(mHideRunnable, timeout);
             }
         }
+        ProgressHandler.hideProgressDialogue();
     }
 
     /**

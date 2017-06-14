@@ -23,8 +23,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         videoPlayerView = (VideoPlayerView)findViewById(R.id.videoView);
-
-        videoPlayerView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.movie,false);
+//https://s3-eu-west-1.amazonaws.com/shorttest20/trans/1/12cca117efffeab1901e47c4658102f5.mp4
+//        videoPlayerView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.movie,false);
+        videoPlayerView.setVideoPath("https://s3-eu-west-1.amazonaws.com/shorttest20/trans/1/12cca117efffeab1901e47c4658102f5.mp4",false);
 
 
     }

@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity">
 
+    <include layout="@layout/content_main" />
     <LinearLayout
         android:id="@+id/empty_view_layout"
         android:layout_width="match_parent"
@@ -54,7 +55,7 @@
                     android:id="@+id/title"
                     android:layout_width="280dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:lines="2"
                     android:text="Just Another Love Story"
                     android:textColor="#FFF"
@@ -62,9 +63,10 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/video_genre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:text="DRAMA, LOVE, 30 MIN"
                     android:textColor="@color/secondary_text_color"
@@ -75,7 +77,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
             android:text="STORYLINE"
             android:textColor="@color/primary_text_color"
             android:textSize="14sp" />
@@ -84,19 +87,45 @@
             android:id="@+id/video_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_margin="10dp"
             android:text="This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. This is movie description. "
+            android:textColor="#FFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="CREDITS"
+            android:textColor="@color/primary_text_color"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/credits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:textColor="#FFF" />
 
         <LinearLayout
             android:id="@+id/layout_action_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:id="@+id/btn_like"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_like_button" />
+
+            <Button
+                android:id="@+id/btn_watch_later"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/selector_watch_later_button" />
 
         </LinearLayout>
     </LinearLayout>

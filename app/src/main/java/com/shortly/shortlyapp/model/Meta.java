@@ -7,6 +7,15 @@ package com.shortly.shortlyapp.model;
 public class Meta {
     private Integer status;
     private String message;
+    private int total;
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
     public Integer getStatus() {
         return status;

@@ -192,6 +192,9 @@ public class VideoDetailResponse {
     }
 
     public Boolean getLiked() {
+        if (liked == null) {
+            return false;
+        }
         return liked;
     }
 
@@ -200,6 +203,9 @@ public class VideoDetailResponse {
     }
 
     public Boolean getLater() {
+        if (later == null) {
+            return false;
+        }
         return later;
     }
 

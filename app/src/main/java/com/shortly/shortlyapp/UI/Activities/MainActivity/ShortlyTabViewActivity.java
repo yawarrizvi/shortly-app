@@ -18,15 +18,17 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.shortly.shortlyapp.Interfaces.SyncInterface;
+import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
+import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
+import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
 import java.util.List;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 
 public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
 
@@ -44,6 +46,10 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private int mSearchPageNumber = 1;
+    private int mVideoListPageNumber = 1;
+    private int mWatchLaterPageNumber = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +81,15 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-                if (tab.getPosition() == 1) {
+                int tabPosition = tab.getPosition();
+                mViewPager.setCurrentItem(tabPosition);
+                if (tabPosition == 1) {
                     searchData();
+                } else if (tabPosition == 0) {
+                    //get video list
+                } else if (tabPosition == 2) {
+                    //get watch later videos
+                    getWatchLaterList();
                 } else {
                     Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
                     startActivity(intent);
@@ -97,6 +109,41 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
     }
 
+    private void getVideoList() {
+
+    }
+
+    private void getWatchLaterList() {
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
+                                Log.v("", "Watch Later Complete");
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                });
+                APICalls.getWatchLaterVideos(mWatchLaterPageNumber, ShortlyTabViewActivity.this);
+
+            }
+
+
+        }.start();
+    }
+
     private void searchData() {
 
         new Thread() {
@@ -107,13 +154,13 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 List<VideoDetailResponse> resultData = (List<VideoDetailResponse>) resultObject;
-                                Log.v("","Search Complete");
+                                Log.v("", "Search Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-
+                                ProgressHandler.hideProgressDialogue();
                                 break;
                             default:
 
@@ -203,7 +250,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position == 1){
+            if (position == 1) {
                 return ItemFragment.newInstance(2);
             } else {
                 return PlaceholderFragment.newInstance(position + 1);

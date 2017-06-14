@@ -7,6 +7,7 @@ import com.shortly.shortlyapp.model.LoginResponseDTO;
 import com.shortly.shortlyapp.model.MostViewedListDTO;
 import com.shortly.shortlyapp.model.SearchDTO;
 import com.shortly.shortlyapp.model.VideoDetailDTO;
+import com.shortly.shortlyapp.model.WatchLaterDTO;
 import com.shortly.shortlyapp.utils.WebUrls;
 
 import java.util.HashMap;
@@ -120,11 +121,12 @@ public class RestClient {
         })
         Call<DefaultDTO> pushVideoEnd(@Header("X-Authentication-Token") String authToken, @Path("userId") int userId, @Path("VideoId") int videoID);
 
-        @POST("later/video/end")
+        @FormUrlEncoded
+        @POST("api/later/video")
         @Headers({
-                "Accept:application/json"
+                "Content-Type: application/x-www-form-urlencoded"
         })
-        Call<DefaultDTO> addVideoToWatchLater(@Header("X-Authentication-Token") String authToken, @Body HashMap<String, Object> requestParameters);
+        Call<DefaultDTO> addVideoToWatchLater(@Header("X-Authentication-Token") String authToken, @Field("user_id") int userId, @Field("video_id") int videoId, @Field("time") int videoTime);
 
         @POST("api/like/video")
         @Headers({
@@ -151,12 +153,19 @@ public class RestClient {
         })
         Call<MostViewedListDTO> getMostViewedVideos(@Header("X-Authentication-Token") String authToken);
 
+        //First Video
         @POST("/api/featured/videos")
         @Headers({
                 "Accept:application/json"
         })
-        Call<MostViewedListDTO> getFeaturedVideos(@Header("X-Authentication-Token") String authToken);
+        Call<MostViewedListDTO> getFirstVideo(@Header("X-Authentication-Token") String authToken);
 
-
+        @FormUrlEncoded
+        @POST("api/later/video/list")
+        @Headers({
+//                "Accept:application/json",
+                "Content-Type: application/x-www-form-urlencoded"
+        })
+        Call<WatchLaterDTO> fetchWatchLaterList(@Header("X-Authentication-Token") String authToken, @Field("user_id") int userId, @Field("page") int page);
     }
 }
