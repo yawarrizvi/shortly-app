@@ -197,7 +197,7 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
                     @Override
-                    public void onAPIResult(int result, Object resultObject) {
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 ProgressHandler.hideProgressDialogue();
@@ -285,7 +285,7 @@ public class LoginActivity extends BaseActivity implements SyncInterface {
 
 
     @Override
-    public void onAPIResult(int result, Object resultObject) {
+    public void onAPIResult(int result, Object resultObject, int totalRecords) {
 
     }
 }

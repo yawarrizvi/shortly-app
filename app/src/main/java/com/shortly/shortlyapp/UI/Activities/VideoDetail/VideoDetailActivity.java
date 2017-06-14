@@ -131,7 +131,7 @@ public class VideoDetailActivity extends BaseActivity {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
                     @Override
-                    public void onAPIResult(int result, Object resultObject) {
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 loadVideoDetails(resultObject);
@@ -219,7 +219,7 @@ public class VideoDetailActivity extends BaseActivity {
                 public void run() {
                     APICalls.setSyncInterface(new SyncInterface() {
                         @Override
-                        public void onAPIResult(int result, Object resultObject) {
+                        public void onAPIResult(int result, Object resultObject, int totalRecords) {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                     showResponse("Video Liked!");
@@ -267,7 +267,7 @@ public class VideoDetailActivity extends BaseActivity {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
                     @Override
-                    public void onAPIResult(int result, Object resultObject) {
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 showResponse("Video added to watch later list!");

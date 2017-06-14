@@ -147,11 +147,14 @@ public class RestClient {
         })
         Call<GenreListDTO> getGenreList(@Header("X-Authentication-Token") String authToken);
 
+        //Scroller + list
+        @FormUrlEncoded
         @POST("api/recent/videos")
         @Headers({
+                "Content-Type: application/x-www-form-urlencoded",
                 "Accept:application/json"
         })
-        Call<MostViewedListDTO> getMostViewedVideos(@Header("X-Authentication-Token") String authToken);
+        Call<MostViewedListDTO> getMostViewedVideos(@Header("X-Authentication-Token") String authToken, @Field("page") int pageNumber);
 
         //First Video
         @POST("/api/featured/videos")

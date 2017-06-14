@@ -5,5 +5,5 @@ package com.shortly.shortlyapp.Interfaces;
  */
 
 public interface SyncInterface {
-    void onAPIResult(int result, Object resultObject);
+    void onAPIResult(int result, Object resultObject, int count);
 }

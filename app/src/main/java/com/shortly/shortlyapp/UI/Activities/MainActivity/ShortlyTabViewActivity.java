@@ -1,6 +1,5 @@
 package com.shortly.shortlyapp.UI.Activities.MainActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,6 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
-import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
@@ -87,12 +85,13 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     searchData();
                 } else if (tabPosition == 0) {
                     //get video list
+                    getVideoList();
                 } else if (tabPosition == 2) {
                     //get watch later videos
                     getWatchLaterList();
                 } else {
-                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+//                    startActivity(intent);
                 }
             }
 
@@ -110,7 +109,34 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     }
 
     private void getVideoList() {
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
+                                Log.v("", "Video List Complete");
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                            default:
 
+                                break;
+                        }
+                    }
+                });
+                APICalls.getFirstVideoData(mVideoListPageNumber, ShortlyTabViewActivity.this);
+
+            }
+
+
+        }.start();
     }
 
     private void getWatchLaterList() {
@@ -118,7 +144,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
                     @Override
-                    public void onAPIResult(int result, Object resultObject) {
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
@@ -150,7 +176,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
                     @Override
-                    public void onAPIResult(int result, Object resultObject) {
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 List<VideoDetailResponse> resultData = (List<VideoDetailResponse>) resultObject;
