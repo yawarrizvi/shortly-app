@@ -1,5 +1,6 @@
 package com.shortly.shortlyapp.UI.Activities.MainActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
+import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
@@ -91,8 +93,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                 } else if (tabPosition == 2) {
                     getWatchLaterList();
                 } else {
-//                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+                    startActivity(intent);
                 }
             }
 

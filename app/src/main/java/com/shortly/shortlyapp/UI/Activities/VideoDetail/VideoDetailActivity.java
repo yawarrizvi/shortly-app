@@ -1,5 +1,6 @@
 package com.shortly.shortlyapp.UI.Activities.VideoDetail;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -63,13 +64,14 @@ public class VideoDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_video_detail);
-
-
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mVideoPlayerView = (VideoPlayerView) findViewById(R.id.videoView);
+        mVideoPlayerView.setVisibility(View.GONE);
 
         //get video id from intent
         mVideoId = 1;
@@ -102,18 +104,13 @@ public class VideoDetailActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-//        if(currentTime>0){
-//            videoPlayerView.setCurrentTime(currentTime);
-//
-//        }
-//        videoPlayerView.setCurrentTime(50);
-//        videoPlayerView.play();
     }
 
     //    @Override
     public void onBackPressed() {
         if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
+            setButtonConfig();
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             mVideoPlayTime = mVideoPlayerView.getCurrentTime();
             mVideoPlayerView.stop();
             mVideoDetailLayout.setVisibility(View.VISIBLE);
@@ -196,10 +193,10 @@ public class VideoDetailActivity extends BaseActivity {
             mEmptyViewLayout.setVisibility(View.GONE);
             mVideoPlayerView.setVisibility(View.VISIBLE);
 
-            mVideoPlayerView.setVideoPath(videoPath, false);
+            mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
             mVideoPlayerView.setCurrentTime(mVideoPlayTime);
             ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
-            mVideoPlayerView.playVideo();
+            mVideoPlayerView.playVideo(VideoDetailActivity.this);
         }
     }
 
@@ -313,7 +310,13 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
     private void setButtonConfig() {
-        mLikeButton.setPressed(mVideoDetail.getLiked());
-        mWatchLaterButton.setPressed(mVideoDetail.getLater());
+        if (mVideoDetail != null) {
+            if (mLikeButton != null) {
+                mLikeButton.setPressed(mVideoDetail.getLiked());
+            }
+            if (mWatchLaterButton != null) {
+                mWatchLaterButton.setPressed(mVideoDetail.getLater());
+            }
+        }
     }
 }
