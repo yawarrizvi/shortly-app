@@ -2,6 +2,7 @@ package com.shortly.shortlyapp.api;
 
 import com.shortly.shortlyapp.BuildConfig;
 import com.shortly.shortlyapp.model.DefaultDTO;
+import com.shortly.shortlyapp.model.DurationDTO;
 import com.shortly.shortlyapp.model.GenreListDTO;
 import com.shortly.shortlyapp.model.LoginResponseDTO;
 import com.shortly.shortlyapp.model.MostViewedListDTO;
@@ -170,5 +171,12 @@ public class RestClient {
                 "Content-Type: application/x-www-form-urlencoded"
         })
         Call<WatchLaterDTO> fetchWatchLaterList(@Header("X-Authentication-Token") String authToken, @Field("user_id") int userId, @Field("page") int page);
+
+
+        @POST("api/later/video/list")
+        @Headers({
+                "Accept:application/json"
+        })
+        Call<DurationDTO> fetchDurationOptions(@Header("X-Authentication-Token") String authToken);
     }
 }

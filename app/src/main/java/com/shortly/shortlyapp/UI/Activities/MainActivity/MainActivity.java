@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         videoPlayerView = (VideoPlayerView)findViewById(R.id.videoView);
 //https://s3-eu-west-1.amazonaws.com/shorttest20/trans/1/12cca117efffeab1901e47c4658102f5.mp4
 //        videoPlayerView.setVideoPath("android.resource://" + getPackageName() + "/" + R.raw.movie,false);
-        videoPlayerView.setVideoPath("https://s3-eu-west-1.amazonaws.com/shorttest20/trans/1/12cca117efffeab1901e47c4658102f5.mp4",false);
+//        videoPlayerView.setVideoPath("https://s3-eu-west-1.amazonaws.com/shorttest20/trans/1/12cca117efffeab1901e47c4658102f5.mp4",false);
 
 
     }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         videoPlayerView.setCurrentTime(50);
-        videoPlayerView.play();
+//        videoPlayerView.play();
 
 
     }

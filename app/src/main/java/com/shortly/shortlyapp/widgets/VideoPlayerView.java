@@ -7,6 +7,7 @@ package com.shortly.shortlyapp.widgets;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -62,6 +63,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     private boolean mIsDragging;
     private boolean isPrepared = false;
     private int initialTime = 0;
+    private Activity mActivity;
 
     private int mWidth;
     private int mHeight;
@@ -106,7 +108,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
             // TODO Auto-generated method stub
             Log.d(TAG, "mHideRunnable hide controller");
             mHandler.removeCallbacks(mShowRunnable);
-            mLayoutController.setVisibility(View.GONE);
+//            mLayoutController.setVisibility(View.GONE);
             if (mPlayer != null) {
                 if (mPlayer.isPlaying()) {
                     Log.d(TAG, "pause button set to gone");
@@ -196,6 +198,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     private void initView() {
         LayoutInflater inflate = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflate.inflate(R.layout.layout_video_player, null);
+
         this.addView(view);
         initControllerView(view);
         //powerManager = (PowerManager) getContext().getSystemService(Service.POWER_SERVICE);
@@ -219,13 +222,12 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         mSeekBar.setMax(100);
         mSeekBar.setOnSeekBarChangeListener(mSeekListener);
         mSurfaceView = (SurfaceView) view.findViewById(R.id.videoSurface);
-
         surfaceHolder = mSurfaceView.getHolder();
         surfaceHolder.addCallback(this);
 
         mSurfaceView.setOnClickListener(this);
         mLayoutController = (RelativeLayout) view.findViewById(R.id.layoutController);
-        mLayoutController.setVisibility(View.GONE);
+//        mLayoutController.setVisibility(View.GONE);
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
     }
@@ -235,16 +237,15 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      *
      * @param videoPath
      */
-    public void setVideoPath(String videoPath, boolean needFirstFrame) {
+    public void setVideoPath(String videoPath, boolean needFirstFrame, Activity activity) {
         mVideoPath = videoPath;
+
         if (needFirstFrame) {
             new GetVideoFirstFrameTask(videoPath, this).execute();
             if (null != mSurfaceView) {
                 mSurfaceView.setBackgroundColor(Color.TRANSPARENT);
             }
         }
-
-
 
         // reset MediaPlayer
         mPlayer = new MediaPlayer();
@@ -253,7 +254,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         // reset play and pause button and other view
         mBtnPlay.setVisibility(View.VISIBLE);
         mBtnPause.setVisibility(View.GONE);
-        mLayoutController.setVisibility(View.GONE);
+//        mLayoutController.setVisibility(View.GONE);
         mSeekBar.setOnSeekBarChangeListener(mSeekListener);
 
         try {
@@ -307,7 +308,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
 
     public void prepare() {
 
-        playVideo();
+        playVideo(mActivity);
 
         this.postDelayed(new Runnable() {
             @Override
@@ -323,7 +324,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlay:
-                playVideo();
+                playVideo(mActivity);
                 break;
             case R.id.btnPause:
                 pauseVideo();
@@ -337,8 +338,13 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         }
     }
 
-    public void playVideo() {
+    public void playVideo(Activity activity) {
         Log.d(TAG, "onclick play ");
+        if (mActivity == null) {
+            if (activity != null) {
+                mActivity = activity;
+            }
+        }
         if (null == mPlayer) {
             return;
         }
@@ -489,6 +495,9 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
 //
 //
 //        }
+        if (mActivity != null) {
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         Activity activity = getParentActivity();
         if (activity != null) {
@@ -667,7 +676,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         if (null != mPlayer) {
             mPlayer.setDisplay(mSurfaceView.getHolder());
         } else {
-            setVideoPath(mVideoPath, false);
+            setVideoPath(mVideoPath, false, null);
         }
     }
 

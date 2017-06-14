@@ -1,5 +1,6 @@
 package com.shortly.shortlyapp.UI.Activities.MainActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,11 +24,13 @@ import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
 import com.shortly.shortlyapp.UI.Activities.WatchLaterFragment;
+import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener {
@@ -50,6 +53,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     private int mVideoListPageNumber = 1;
     private int mWatchLaterPageNumber = 1;
 
+    List<WatchLaterResponse> mWatchLaterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setSelectedTabIndicatorHeight(0);
+
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_list));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_search));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_watch_later));
@@ -82,18 +87,16 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int tabPosition = tab.getPosition();
-                mViewPager.setCurrentItem(tabPosition);
-                if (tabPosition == 1) {
-                    searchData();
-                } else if (tabPosition == 0) {
-                    //get video list
+                mViewPager.setCurrentItem(tabPosition, false);
+                if (tabPosition == 0) {
                     getVideoList();
+                } else if (tabPosition == 1) {
+                    searchData();
                 } else if (tabPosition == 2) {
-                    //get watch later videos
                     getWatchLaterList();
                 } else {
-//                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+                    startActivity(intent);
                 }
             }
 
@@ -118,7 +121,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
+                                ArrayList<Object> videoListData = (ArrayList<Object>) resultObject;
                                 Log.v("", "Video List Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -134,14 +137,15 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     }
                 });
                 APICalls.getFirstVideoData(mVideoListPageNumber, ShortlyTabViewActivity.this);
-
             }
-
 
         }.start();
     }
 
     private void getWatchLaterList() {
+        if (mWatchLaterList != null && mWatchLaterList.size() == 0) {
+            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+        }
         new Thread() {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
@@ -156,7 +160,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                ProgressHandler.hideProgressDialogue();
+                                showError(result);
                                 break;
                             default:
 
@@ -188,19 +192,46 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                ProgressHandler.hideProgressDialogue();
+                                showError(result);
                                 break;
                             default:
-
+                                ProgressHandler.hideProgressDialogue();
                                 break;
                         }
                     }
                 });
                 APICalls.fetchSearchResults("", -1, -1, ShortlyTabViewActivity.this);
             }
-
-
         }.start();
+    }
+
+    private void showError(int errorType) {
+        final String message;
+        switch (errorType) {
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                message = getString(R.string.key_error_no_connectivity);
+                break;
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                message = getString(R.string.key_error_service_failure);
+                break;
+            default:
+                message = getString(R.string.key_error_service_failure);
+                break;
+        }
+
+        Thread timerThread = new Thread() {
+            public void run() {
+                try {
+                    sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    ProgressHandler.upDateProgressDialog(ShortlyTabViewActivity.this, "", message, 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
+                }
+            }
+        };
+        timerThread.start();
     }
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,5 +1,6 @@
 package com.shortly.shortlyapp.UI.Activities.VideoDetail;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -63,16 +64,18 @@ public class VideoDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_video_detail);
-
-
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mVideoPlayerView = (VideoPlayerView) findViewById(R.id.videoView);
+        mVideoPlayerView.setVisibility(View.GONE);
 
         //get video id from intent
         mVideoId = 1;
+        mVideoDetailLayout.setVisibility(View.GONE);
         fetchVideoDetails();
         mImageViewThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,35 +98,28 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
     public void onPause() {
-        mVideoPlayTime = mVideoPlayerView.getCurrentTime();
         super.onPause();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-//        if(currentTime>0){
-//            videoPlayerView.setCurrentTime(currentTime);
-//
-//        }
-//        videoPlayerView.setCurrentTime(50);
-//        videoPlayerView.play();
-
-
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
-//            mVideoPlayTime = mVideoPlayerView.getCurrentTime();
-//            mVideoPlayerView.stop();
-//        } else {
-//            super.onBackPressed();
-//        }
-//
-//    }
+    //    @Override
+    public void onBackPressed() {
+        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
+            setButtonConfig();
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            mVideoPlayTime = mVideoPlayerView.getCurrentTime();
+            mVideoPlayerView.stop();
+            mVideoDetailLayout.setVisibility(View.VISIBLE);
+            mEmptyViewLayout.setVisibility(View.GONE);
+            mVideoPlayerView.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private void fetchVideoDetails() {
         ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
@@ -140,6 +136,7 @@ public class VideoDetailActivity extends BaseActivity {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                showError(result);
                                 showEmptyView();
                                 break;
                             default:
@@ -156,7 +153,6 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
     private void showEmptyView() {
-
         mVideoDetailLayout.setVisibility(View.GONE);
         mEmptyViewLayout.setVisibility(View.VISIBLE);
 //        ProgressHandler.hideProgressDialogue();
@@ -168,15 +164,8 @@ public class VideoDetailActivity extends BaseActivity {
             mVideoDetail = (VideoDetailResponse) resultObject;
             mIsVideoLiked = mVideoDetail.getLiked();
             mIsWatchLater = mVideoDetail.getLater();
-
-
-            if (mIsVideoLiked) {
-                mLikeButton.setSelected(true);
-            }
-
-            if (mIsWatchLater) {
-                mWatchLaterButton.setSelected(true);
-            }
+            mVideoPlayTime = mVideoDetail.getTime();
+            setButtonConfig();
 
             String title = mVideoDetail.getTitle();
             String casts = mVideoDetail.getCasts();
@@ -204,12 +193,11 @@ public class VideoDetailActivity extends BaseActivity {
             mEmptyViewLayout.setVisibility(View.GONE);
             mVideoPlayerView.setVisibility(View.VISIBLE);
 
-            mVideoPlayerView.setVideoPath(videoPath, false);
+            mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
             mVideoPlayerView.setCurrentTime(mVideoPlayTime);
             ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
-            mVideoPlayerView.playVideo();
+            mVideoPlayerView.playVideo(VideoDetailActivity.this);
         }
-
     }
 
     private void likeVideo() {
@@ -223,6 +211,7 @@ public class VideoDetailActivity extends BaseActivity {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                     showResponse("Video Liked!");
+                                    mLikeButton.setPressed(true);
                                     break;
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
@@ -234,6 +223,7 @@ public class VideoDetailActivity extends BaseActivity {
                                     ProgressHandler.hideProgressDialogue();
                                     break;
                             }
+                            setButtonConfig();
                         }
                     });
                     APICalls.likeVideo(mVideoId, VideoDetailActivity.this);
@@ -241,9 +231,8 @@ public class VideoDetailActivity extends BaseActivity {
 
 
             }.start();
-
-            mLikeButton.setSelected(true);
         }
+        setButtonConfig();
     }
 
     private void showResponse(final String message) {
@@ -271,24 +260,63 @@ public class VideoDetailActivity extends BaseActivity {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 showResponse("Video added to watch later list!");
+                                mWatchLaterButton.setPressed(true);
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                showResponse("An error occurred. Please try again");
+                                showError(result);
                                 break;
                             default:
                                 ProgressHandler.hideProgressDialogue();
                                 break;
                         }
+                        setButtonConfig();
                     }
                 });
                 APICalls.addVideoToWatchLater(mVideoId, mVideoPlayTime, VideoDetailActivity.this);
             }
-
-
         }.start();
-        mWatchLaterButton.setSelected(true);
+    }
+
+    private void showError(int errorType) {
+        final String message;
+        switch (errorType) {
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                message = getString(R.string.key_error_no_connectivity);
+                break;
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                message = getString(R.string.key_error_service_failure);
+                break;
+            default:
+                message = getString(R.string.key_error_service_failure);
+                break;
+        }
+
+        Thread timerThread = new Thread() {
+            public void run() {
+                try {
+                    sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    ProgressHandler.upDateProgressDialog(VideoDetailActivity.this, "", message, 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
+                }
+            }
+        };
+        timerThread.start();
+    }
+
+    private void setButtonConfig() {
+        if (mVideoDetail != null) {
+            if (mLikeButton != null) {
+                mLikeButton.setPressed(mVideoDetail.getLiked());
+            }
+            if (mWatchLaterButton != null) {
+                mWatchLaterButton.setPressed(mVideoDetail.getLater());
+            }
+        }
     }
 }
