@@ -25,7 +25,7 @@ public class VideoDetailResponse {
     private Integer viewsCount;
     private Integer totalVideos;
     private Boolean liked;
-    private Boolean later;
+    private int later;
     private Boolean playlist;
     private String category;
     private String thumbnails;
@@ -210,14 +210,11 @@ public class VideoDetailResponse {
         this.liked = liked;
     }
 
-    public Boolean getLater() {
-        if (later == null) {
-            return false;
-        }
+    public int getLater() {
         return later;
     }
 
-    public void setLater(Boolean later) {
+    public void setLater(int later) {
         this.later = later;
     }
 

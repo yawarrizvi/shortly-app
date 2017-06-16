@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,10 +22,11 @@ import com.shortly.shortlyapp.Interfaces.SyncInterface;
 import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
+import com.shortly.shortlyapp.UI.Activities.CustomViewPager;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment;
+import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
 import com.shortly.shortlyapp.UI.Activities.WatchLaterFragment;
-import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
@@ -48,18 +50,23 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private CustomViewPager mViewPager;
     private int mSearchPageNumber = 1;
     private int mVideoListPageNumber = 1;
     private int mWatchLaterPageNumber = 1;
+    private int mApiCallCount = 0;
+    int mSelectedTabIndex = 0;
 
     List<WatchLaterResponse> mWatchLaterList;
+    ArrayList<Object> mVideoListData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+        ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+        getVideoList(true);
         setContentView(R.layout.activity_shortly_tab_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,29 +81,33 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_list));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_search));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_watch_later));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_settings));
+//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_settings));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (CustomViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setPagingEnabled(false);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int tabPosition = tab.getPosition();
+                mSelectedTabIndex = tabPosition;
                 mViewPager.setCurrentItem(tabPosition, false);
                 if (tabPosition == 0) {
-                    getVideoList();
+                    getVideoList(false);
                 } else if (tabPosition == 1) {
-                    searchData();
+                    ProgressHandler.showProgressDialog(ShortlyTabViewActivity.this, "", "An error occured on server.", 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
+//                    searchData();
                 } else if (tabPosition == 2) {
                     getWatchLaterList();
                 } else {
-                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-                    startActivity(intent);
+
+//                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+//                    startActivity(intent);
                 }
             }
 
@@ -113,7 +124,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
     }
 
-    private void getVideoList() {
+    private void getVideoList(final boolean fetchWatchLaterData) {
         new Thread() {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
@@ -121,7 +132,12 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                ArrayList<Object> videoListData = (ArrayList<Object>) resultObject;
+                                mVideoListData = (ArrayList<Object>) resultObject;
+                                mSectionsPagerAdapter.notifyDataSetChanged();
+                                if (fetchWatchLaterData) {
+                                    getWatchLaterList();
+                                    hideLoader();
+                                }
                                 Log.v("", "Video List Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -143,9 +159,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     }
 
     private void getWatchLaterList() {
-        if (mWatchLaterList != null && mWatchLaterList.size() == 0) {
-            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
-        }
         new Thread() {
             public void run() {
                 APICalls.setSyncInterface(new SyncInterface() {
@@ -153,7 +166,9 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                List<WatchLaterResponse> resultData = (List<WatchLaterResponse>) resultObject;
+                                mWatchLaterList = (List<WatchLaterResponse>) resultObject;
+                                //TODO: update recycler view
+                                hideLoader();
                                 Log.v("", "Watch Later Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -223,7 +238,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         Thread timerThread = new Thread() {
             public void run() {
                 try {
-                    sleep(1500);
+                    sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
@@ -258,6 +273,18 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
+
+    @Override
+    public void onListFragmentInteraction(WatchLaterResponse item) {
+
+        showVideoDetail(item.getVideoId());
+        //TODO: watch later item click
+    }
+
+    @Override
+    public void onListFragmentInteraction(VideoDetailResponse item) {
+        showVideoDetail(item.getVideoId());
     }
 
     /**
@@ -299,51 +326,71 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-            public SectionsPagerAdapter(FragmentManager fm) {
-                super(fm);
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+
+            if (position == 0) {
+                return VideoListFragment.newInstance(1,mVideoListData);
+
+            } else if (position == 1) {
+
+                return ItemFragment.newInstance(2, mVideoListData);
+
+            } else if (position == 2) {
+                return WatchLaterFragment.newInstance(1, mWatchLaterList);
+            } else {
+                return PlaceholderFragment.newInstance(position + 1);
             }
 
-            @Override
-            public Fragment getItem(int position) {
-                // getItem is called to instantiate the fragment for the given page.
-                // Return a PlaceholderFragment (defined as a static inner class below).
+        }
 
-                if (position == 0) {
-                    return VideoListFragment.newInstance(1);
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
 
-                } else if (position == 1) {
-                    return ItemFragment.newInstance(2);
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
 
-                } else if (position == 2) {
-
-                    return WatchLaterFragment.newInstance(1);
-                }else {
-                    return PlaceholderFragment.newInstance(position + 1);
-                }
-
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "SECTION 1";
+                case 1:
+                    return "SECTION 2";
+                case 2:
+                    return "SECTION 3";
+                case 3:
+                    return "SECTION 4";
             }
+            return null;
+        }
+    }
 
-            @Override
-            public int getCount() {
-                // Show 3 total pages.
-                return 4;
-            }
+    private void hideLoader() {
+        mApiCallCount++;
+        if (mApiCallCount == 2) {
 
-            @Override
-            public CharSequence getPageTitle(int position) {
-                switch (position) {
-                    case 0:
-                        return "SECTION 1";
-                    case 1:
-                        return "SECTION 2";
-                    case 2:
-                        return "SECTION 3";
-                    case 3:
-                        return "SECTION 4";
-                }
-                return null;
-            }
+            ProgressHandler.hideProgressDialogue();
+        }
+
+    }
+
+    private void showVideoDetail(int videoId) {
+        Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
+        intent.putExtra("videoId", videoId);
+        startActivity(intent);
     }
 }

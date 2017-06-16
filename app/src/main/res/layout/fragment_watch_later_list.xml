@@ -11,4 +11,5 @@
     app:layoutManager="LinearLayoutManager"
     tools:context="com.shortly.shortlyapp.UI.Activities.WatchLaterFragment"
     tools:listitem="@layout/fragment_watch_later_item"
-    android:padding="5dp"/>
+    android:padding="5dp"
+    android:background="#000"/>

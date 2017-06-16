@@ -1,20 +1,22 @@
 package com.shortly.shortlyapp.UI.Activities;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.UI.Activities.ItemFragment.OnListFragmentInteractionListener;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
+import com.shortly.shortlyapp.model.VideoDetailResponse;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,12 +31,14 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private static final int TYPE_LIST_ITEM_TOP = 2;
     private static final int TYPE_LIST_ITEM = 3;
 
-    private final List<DummyItem> mValues;
+    private final ArrayList<Object>  mValues;
     private final VideoListFragment.OnListFragmentInteractionListener mListener;
+    private static Context mContext;
 
-    public VideoListRecyclerViewAdapter(FragmentManager fm, List<DummyItem> items, VideoListFragment.OnListFragmentInteractionListener listener) {
+    public VideoListRecyclerViewAdapter(Context context, FragmentManager fm, ArrayList<Object> items, VideoListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        mContext = context;
         mFM = fm;
     }
 
@@ -97,6 +101,10 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     @Override
     public int getItemCount() {
+        if(mValues == null){
+          return  0;
+        }
+
         return mValues.size();
     }
 
@@ -113,10 +121,6 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             return  TYPE_LIST_ITEM;
         }
     }
-
-
-
-
     /**
      * Item Holder for header
      */
@@ -124,13 +128,15 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public final ImageView mImageView;
+        public VideoDetailResponse mItem;
 
         public ListItemHeader(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.title);
+            mContentView = (TextView) view.findViewById(R.id.cast);
+            mImageView = (ImageView) view.findViewById(R.id.img_view_thumbnail);
         }
 
         @Override
@@ -141,9 +147,10 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindListItemHeader(final ListItemHeader holder, int position) {
 
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = (VideoDetailResponse) mValues.get(position);
+        holder.mIdView.setText(holder.mItem.getTitle());
+        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +174,8 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         public final TextView mIdView;
         public final TextView mContentView;
         public final ViewPager mPager;
-        public DummyItem mItem;
+        public final ImageView mImageView;
+        public List<VideoDetailResponse> mItem;
 
         public ListItemPager(View view) {
             super(view);
@@ -175,6 +183,7 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
             mPager = (ViewPager) view.findViewById(R.id.pager_Item);
+            mImageView = (ImageView) view.findViewById(R.id.img_view_thumbnail);
         }
 
         @Override
@@ -185,11 +194,10 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindListPager(final ListItemPager holder, int position) {
 
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
-        holder.mPager.setAdapter(new MoviesViewPagerAdapter(mFM));
-
+        holder.mItem = (List<VideoDetailResponse>) mValues.get(position);
+//        holder.mIdView.setText(mValues.get(position).id);
+//        holder.mContentView.setText(mValues.get(position).content);
+        holder.mPager.setAdapter(new MoviesViewPagerAdapter(mFM, holder.mItem));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +205,7 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    //mListener.onListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -212,13 +220,15 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public final ImageView mImageView;
+        public VideoDetailResponse mItem;
 
         public ListItemTop(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.title);
+            mContentView = (TextView) view.findViewById(R.id.cast);
+            mImageView = (ImageView) view.findViewById(R.id.img_view_thumbnail);
         }
 
         @Override
@@ -229,9 +239,10 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     private void bindListItemTop(final ListItemTop holder, int position) {
 
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = (VideoDetailResponse) mValues.get(position);
+        holder.mIdView.setText(holder.mItem.getTitle());
+        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,13 +264,15 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public VideoDetailResponse mItem;
+        public final ImageView mImageView;
 
         public ListItemHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.title);
+            mContentView = (TextView) view.findViewById(R.id.cast);
+            mImageView = (ImageView) view.findViewById(R.id.img_view_thumbnail);
         }
 
         @Override
@@ -269,10 +282,10 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     private void bindListItem(final ListItemHolder holder, int position) {
-
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = (VideoDetailResponse) mValues.get(position);
+        holder.mIdView.setText(holder.mItem.getTitle());
+        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

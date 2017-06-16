@@ -11,10 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
+import com.shortly.shortlyapp.model.VideoDetailResponse;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -29,6 +28,7 @@ public class VideoListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private static ArrayList<Object> mItems;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,10 +39,11 @@ public class VideoListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static VideoListFragment newInstance(int columnCount) {
+    public static VideoListFragment newInstance(int columnCount, ArrayList<Object> items) {
         VideoListFragment fragment = new VideoListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        mItems = items;
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +71,7 @@ public class VideoListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new VideoListRecyclerViewAdapter(getActivity().getSupportFragmentManager(), DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new VideoListRecyclerViewAdapter(getContext(), getActivity().getSupportFragmentManager(), mItems, mListener));
         }
         return view;
     }
@@ -105,6 +106,6 @@ public class VideoListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(VideoDetailResponse item);
     }
 }

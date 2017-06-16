@@ -488,13 +488,6 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      * prepare video
      */
     public void play() {
-//        Log.v(TAG, "video path = " + mVideoPath);
-//        if (getParentActivity() != null && getParentActivity() instanceof VideoPlayActivity
-//                && getParentActivity().getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT ) {
-//            getParentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//
-//
-//        }
         if (mActivity != null) {
             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }

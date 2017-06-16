@@ -1,5 +1,6 @@
 package com.shortly.shortlyapp.UI.Activities.VideoDetail;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +28,7 @@ public class VideoDetailActivity extends BaseActivity {
     private static VideoDetailResponse mVideoDetail;
     private int mVideoId;
     private boolean mIsVideoLiked;
-    private boolean mIsWatchLater;
+    private int mIsWatchLater;
     int mVideoPlayTime;
 
 
@@ -66,7 +67,13 @@ public class VideoDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_detail);
-//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Intent intent = this.getIntent();
+        if (intent.hasExtra("videoId")) {
+            mVideoId = intent.getIntExtra("videoId", 0);
+
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,7 +81,6 @@ public class VideoDetailActivity extends BaseActivity {
         mVideoPlayerView.setVisibility(View.GONE);
 
         //get video id from intent
-        mVideoId = 1;
         mVideoDetailLayout.setVisibility(View.GONE);
         fetchVideoDetails();
         mImageViewThumbnail.setOnClickListener(new View.OnClickListener() {
@@ -108,9 +114,9 @@ public class VideoDetailActivity extends BaseActivity {
 
     //    @Override
     public void onBackPressed() {
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
             setButtonConfig();
-            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             mVideoPlayTime = mVideoPlayerView.getCurrentTime();
             mVideoPlayerView.stop();
             mVideoDetailLayout.setVisibility(View.VISIBLE);
@@ -315,7 +321,11 @@ public class VideoDetailActivity extends BaseActivity {
                 mLikeButton.setPressed(mVideoDetail.getLiked());
             }
             if (mWatchLaterButton != null) {
-                mWatchLaterButton.setPressed(mVideoDetail.getLater());
+                boolean isPressed = false;
+                if ((mVideoDetail.getLater() == 1)) {
+                    isPressed = true;
+                }
+                mWatchLaterButton.setPressed(isPressed);
             }
         }
     }

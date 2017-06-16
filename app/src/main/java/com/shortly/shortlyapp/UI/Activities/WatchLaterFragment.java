@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
+import com.shortly.shortlyapp.model.WatchLaterResponse;
 
 import java.util.List;
 
@@ -29,6 +28,7 @@ public class WatchLaterFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private static List<WatchLaterResponse> mItems;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,9 +39,10 @@ public class WatchLaterFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static WatchLaterFragment newInstance(int columnCount) {
+    public static WatchLaterFragment newInstance(int columnCount, List<WatchLaterResponse> items) {
         WatchLaterFragment fragment = new WatchLaterFragment();
         Bundle args = new Bundle();
+        mItems = items;
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
@@ -53,6 +54,7 @@ public class WatchLaterFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+
         }
     }
 
@@ -72,7 +74,7 @@ public class WatchLaterFragment extends Fragment {
             }
 
             //TODO: pass data here from api
-            recyclerView.setAdapter(new WatchLaterRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new WatchLaterRecyclerViewAdapter(getContext(), mItems, mListener));
         }
         return view;
     }
@@ -107,6 +109,6 @@ public class WatchLaterFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(WatchLaterResponse item);
     }
 }

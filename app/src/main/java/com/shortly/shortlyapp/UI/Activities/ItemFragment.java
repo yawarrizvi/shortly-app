@@ -14,6 +14,8 @@ import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -27,6 +29,7 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
+    private static ArrayList<Object> mItems;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -37,10 +40,11 @@ public class ItemFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
+    public static ItemFragment newInstance(int columnCount, ArrayList<Object> items) {
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        mItems = items;
         fragment.setArguments(args);
         return fragment;
     }
