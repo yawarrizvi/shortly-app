@@ -6,12 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.shortly.shortlyapp.Interfaces.SyncInterface;
+import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
@@ -31,8 +35,11 @@ public class VideoListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private static ArrayList<Object> mItems;
+    RecyclerView mRecyclerView;
+    VideoListRecyclerViewAdapter mVideoListAdapter;
 
-    int pageIndex = 1;
+    int mTotalRecords = 0;
+    int pageIndex = 2;
     int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
     LinearLayoutManager mLinearLayoutManager;
@@ -72,15 +79,18 @@ public class VideoListFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 mLinearLayoutManager = new LinearLayoutManager(context);
-                recyclerView.setLayoutManager(mLinearLayoutManager);
-                recyclerView.addOnScrollListener(mScrollListener);
+                mRecyclerView.setLayoutManager(mLinearLayoutManager);
+                mRecyclerView.addOnScrollListener(mScrollListener);
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new VideoListRecyclerViewAdapter(getContext(), getActivity().getSupportFragmentManager(), mItems, mListener));
+            if (mVideoListAdapter == null) {
+                mVideoListAdapter = new VideoListRecyclerViewAdapter(getContext(), getActivity().getSupportFragmentManager(), mItems, mListener);
+            }
+            mRecyclerView.setAdapter(mVideoListAdapter);
         }
         return view;
     }
@@ -120,24 +130,61 @@ public class VideoListFragment extends Fragment {
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
+        public void onScrollStateChanged(RecyclerView mRecyclerView, int newState) {
+            super.onScrollStateChanged(mRecyclerView, newState);
 
-            visibleItemCount = recyclerView.getChildCount(); // total items visible
+            visibleItemCount = mRecyclerView.getChildCount(); // total items visible
             totalItemCount = mLinearLayoutManager.getItemCount(); //total current items
             previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
 
             //fetch new data when only 10 items left at bottom
-            if (totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) {
+            if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 10))) {
                 //getVideoList(pageIndex);
-                Toast.makeText(getContext(),"Fetch Next Page Data",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
+                getVideoList();
             }
 
         }
 
         @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
+        public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
+            super.onScrolled(mRecyclerView, dx, dy);
         }
     };
+
+    private void getVideoList() {
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                ArrayList<Object> res = (ArrayList<Object>) resultObject;
+                                mTotalRecords = totalRecords;
+                                if (res.size() > 0) {
+                                    mItems.addAll(res);
+                                    pageIndex++;
+                                    mVideoListAdapter.notifyDataSetChanged();
+                                }
+                                Log.v("", "Video List Complete");
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                });
+                ArrayList<Object> temp = new ArrayList<Object>();
+                APICalls.getVideoList(pageIndex, temp, getContext());
+            }
+
+        }.start();
+    }
 }

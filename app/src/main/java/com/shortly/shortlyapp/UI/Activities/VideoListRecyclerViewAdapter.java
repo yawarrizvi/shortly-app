@@ -195,8 +195,8 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private void bindListPager(final ListItemPager holder, int position) {
 
         holder.mItem = (List<VideoDetailResponse>) mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+//        holder.mViewTitle.setText(mValues.get(position).id);
+//        holder.mViewGenre.setText(mValues.get(position).content);
         holder.mPager.setAdapter(new MoviesViewPagerAdapter(mFM, holder.mItem));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

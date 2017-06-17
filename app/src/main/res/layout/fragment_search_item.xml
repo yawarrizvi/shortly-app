@@ -5,11 +5,44 @@
     android:layout_margin="5dp"
     android:orientation="horizontal">
 
-    <ImageView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ww_item"/>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_view_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/layout_movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:lines="2"
+                android:textColor="#FFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/video_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/secondary_text_color"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/id"
@@ -26,4 +59,5 @@
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         android:visibility="gone" />
+
 </LinearLayout>

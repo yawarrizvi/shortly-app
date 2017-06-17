@@ -11,11 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,7 +71,7 @@ public class SearchListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SearchListRecyclerViewAdapter(mItems, mListener));
+            recyclerView.setAdapter(new SearchListRecyclerViewAdapter(getContext(), mItems, mListener));
         }
         return view;
     }

@@ -27,7 +27,6 @@ import com.shortly.shortlyapp.UI.Activities.SearchListFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
 import com.shortly.shortlyapp.UI.Activities.WatchLaterFragment;
-import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.shortly.shortlyapp.utils.Constants;
@@ -154,7 +153,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
                                 ProgressHandler.hideProgressDialogue();
                                 break;
                             default:
-
                                 break;
                         }
                     }
