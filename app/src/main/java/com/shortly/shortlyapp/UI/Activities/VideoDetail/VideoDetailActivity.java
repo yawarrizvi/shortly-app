@@ -88,7 +88,8 @@ public class VideoDetailActivity extends BaseActivity {
         mImageViewThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playVideo();
+                String videoPath = mVideoDetail.getPath();
+                playVideo(videoPath);
 //                prepareVideo();
 
             }
@@ -119,7 +120,7 @@ public class VideoDetailActivity extends BaseActivity {
     //    @Override
     public void onBackPressed() {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) {
+        if (mVideoPlayerView != null && mVideoPlayerView.isPlaying()) { //TODO:handle video end scenario
             setButtonConfig();
             mVideoPlayTime = mVideoPlayerView.getCurrentTime();
             mVideoPlayerView.stop();
@@ -197,18 +198,24 @@ public class VideoDetailActivity extends BaseActivity {
     }
 
 
+    private void playVideo(final String videoPath) {
 
-    private void playVideo() {
-        String videoPath = mVideoDetail.getPath();
         if (videoPath != null && !videoPath.isEmpty()) {
             mVideoDetailLayout.setVisibility(View.GONE);
             mEmptyViewLayout.setVisibility(View.GONE);
             mVideoPlayerView.setVisibility(View.VISIBLE);
 
-            mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
-            mVideoPlayerView.setCurrentTime(mVideoPlayTime);
-//            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
-            mVideoPlayerView.playVideo(VideoDetailActivity.this);
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
+                    mVideoPlayerView.setCurrentTime(mVideoPlayTime);
+                    mVideoPlayerView.playVideo(VideoDetailActivity.this);
+                }
+            }, 500);
+
         }
     }
 

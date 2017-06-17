@@ -28,7 +28,6 @@ public class SplashActivity extends BaseActivity {
         final int mForcedUpdateRequired =  Prefs.getInstance(this).getIsForcedUpdateRequired(0);*/
 
         /**
-         * Fix for Jira Bug: https://getfieldforce.atlassian.net/browse/FFMVPS-2009
          * Solution:http://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508#16447508
          *
          * https://code.google.com/p/android/issues/detail?id=2373

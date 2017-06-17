@@ -138,6 +138,9 @@ public class VideoDetailResponse implements Parcelable {
     }
 
     public String getDuration() {
+        if (duration == null) {
+            return "0";
+        }
         return duration;
     }
 

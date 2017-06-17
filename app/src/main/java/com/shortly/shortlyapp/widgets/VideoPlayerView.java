@@ -64,6 +64,8 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     private int initialTime = 0;
     private Activity mActivity;
 
+    private boolean mHasVideoEnded;
+
     private int mWidth;
     private int mHeight;
 
@@ -238,18 +240,14 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      */
     public void setVideoPath(String videoPath, boolean needFirstFrame, Activity activity) {
         mVideoPath = videoPath;
-
+        if (mTxtCurrentTime != null) {
+            mTxtCurrentTime.setText(stringForTime(0));
+        }
         if (mActivity == null) {
             if (activity != null) {
                 mActivity = activity;
             }
         }
-
-        if (mActivity != null) {
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
-
-
 
         if (needFirstFrame) {
             new GetVideoFirstFrameTask(videoPath, this).execute();
@@ -276,7 +274,11 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
                 public void onPrepared(MediaPlayer mp) {
 
                     isPrepared = true;
-                    setCurrentTime(initialTime);
+                    //TODO: hide progress bar here?
+                    if (mActivity != null) {
+                        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    }
+                    setCurrentTime(mCurrentTime);
                     //if(mSurfaceView.is)
                     try {
                         mPlayer.setDisplay(mSurfaceView.getHolder());
@@ -297,6 +299,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     Log.d(TAG, "onCompletion entry");
+                    mHasVideoEnded = true;
                     mPlayer.seekTo(1);
                     mBtnPause.setVisibility(View.VISIBLE);
                     mBtnPause.setImageResource(R.mipmap.btn_play_white);
@@ -564,13 +567,16 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         }
         // reset player
         mPlayer.stop();
-        mPlayer.reset();
+//        mPlayer.reset();
         mPlayer.release();
         mPlayer = null;
 
         // reset views
         mBtnPlay.setVisibility(View.GONE);
         mBtnPause.setVisibility(View.GONE);
+        if (mSurfaceView != null) {
+            mSurfaceView.clearAnimation();
+        }
         Activity activity = getParentActivity();
         if (activity != null) {
             Window window = activity.getWindow();
@@ -625,7 +631,6 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      * @return
      */
     public int getCurrentTime() {
-
         return mPlayer.getCurrentPosition();
     }
 
@@ -637,7 +642,11 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     public void setCurrentTime(int current) {
 
         if (isPrepared&& mPlayer!=null) {
-            this.mCurrentTime = current;
+            if (current != mPlayer.getDuration()) {
+                this.mCurrentTime = current;
+            } else {
+                this.mCurrentTime = 0;
+            }
 
             Log.e(TAG, "Current Time is seconds" + current);
 

@@ -550,7 +550,7 @@ public class APICalls {
                             status = genreListDTO.getMeta().getStatus();
                             if (status == Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS) {
                                 List<GenreListResponse> genreResponseList = genreListDTO.getResponse();
-                                HashMap<String, Object> searchOptions = new HashMap<String, Object>();
+                                HashMap<String, Object> searchOptions = new HashMap<>();
                                 searchOptions.put("categories", genreResponseList);
                                 getDurationsList(searchOptions, context);
 //                                mSyncInterface.onAPIResult(Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS, genreResponseList, 0);
