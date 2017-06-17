@@ -38,8 +38,10 @@ public class WatchLaterFragment extends Fragment {
     LinearLayoutManager mLinearLayoutManager;
     WatchLaterRecyclerViewAdapter mAdapter;
 
+    boolean mIsVisibleToUser;
+
     int mTotalRecords = 0;
-    int pageIndex = 2;
+    int pageIndex = 1;
     int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
     /**
@@ -114,7 +116,7 @@ public class WatchLaterFragment extends Fragment {
             //fetch new data when only 3 items left at bottom
             if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 10))) {
                 Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
-                getWatchLaterList();
+                getWatchLaterList(false);
             }
         }
 
@@ -124,9 +126,21 @@ public class WatchLaterFragment extends Fragment {
         }
     };
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            mIsVisibleToUser = true;
+            getWatchLaterList(true);
+        } else {
+            mIsVisibleToUser = false;
+            // fragment is no longer visible
+        }
+    }
 
-    private void getWatchLaterList() {
-        if (WatchLaterFragment.this.isVisible()) {
+
+    private void getWatchLaterList(final boolean clearData) {
+        if (mIsVisibleToUser) {
             new Thread() {
                 public void run() {
                     APICalls.setSyncInterface(new SyncInterface() {
@@ -135,9 +149,15 @@ public class WatchLaterFragment extends Fragment {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                     List<WatchLaterResponse> res = (List<WatchLaterResponse>) resultObject;
+
+                                    if (clearData) {
+                                        mItems.clear();
+                                        pageIndex = 1;
+                                    } else {
+                                        pageIndex++;
+                                    }
                                     if (res.size() > 0) {
                                         mItems.addAll(res);
-                                        pageIndex++;
                                         mAdapter.notifyDataSetChanged();
                                     }
                                     break;

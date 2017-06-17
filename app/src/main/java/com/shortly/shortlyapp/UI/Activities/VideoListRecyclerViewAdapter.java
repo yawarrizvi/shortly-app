@@ -149,7 +149,9 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         holder.mItem = (VideoDetailResponse) mValues.get(position);
         holder.mIdView.setText(holder.mItem.getTitle());
-        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        if (holder.mItem.getCasts() != null && !holder.mItem.getCasts().isEmpty()) {
+            holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        }
         Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +243,9 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
         holder.mItem = (VideoDetailResponse) mValues.get(position);
         holder.mIdView.setText(holder.mItem.getTitle());
-        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        if (holder.mItem.getCasts() != null && !holder.mItem.getCasts().isEmpty()) {
+            holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        }
         Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +288,9 @@ public class VideoListRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private void bindListItem(final ListItemHolder holder, int position) {
         holder.mItem = (VideoDetailResponse) mValues.get(position);
         holder.mIdView.setText(holder.mItem.getTitle());
-        holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        if (holder.mItem.getCasts() != null && !holder.mItem.getCasts().isEmpty()) {
+            holder.mContentView.setText("by: " + holder.mItem.getCasts());
+        }
         Picasso.with(mContext).load(holder.mItem.getThumbnails()).into(holder.mImageView);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

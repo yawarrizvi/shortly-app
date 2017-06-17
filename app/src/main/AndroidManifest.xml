@@ -52,9 +52,10 @@
             android:label="@string/title_activity_video_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".UI.Activities.Settings.ProfileActivity" />
-        <activity android:name=".UI.Activities.Settings.ProfileDetail" />
-        <activity android:name=".UI.Activities.Settings.ProfileDetailActivity"></activity>
+        <activity android:name=".UI.Activities.Settings.ProfileDetailActivity"
+            android:label="Profile"/>
+
+
     </application>
 
 </manifest>

@@ -51,18 +51,23 @@
             <RelativeLayout
                 android:id="@+id/layout_contact_us"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp">
 
                 <TextView
                     android:id="@+id/txt_contact_us"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
                     android:text="Contact Us"
                     android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="14sp" />
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1px"

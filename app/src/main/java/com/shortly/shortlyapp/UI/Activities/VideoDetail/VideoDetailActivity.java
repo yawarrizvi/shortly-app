@@ -279,6 +279,7 @@ public class VideoDetailActivity extends BaseActivity {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                     showResponse("Video Liked!");
+                                    mVideoDetail.setLiked(true);
                                     mLikeButton.setPressed(true);
                                     break;
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -328,6 +329,7 @@ public class VideoDetailActivity extends BaseActivity {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
                                 showResponse("Video added to watch later list!");
+                                mVideoDetail.setLater(1);
                                 mWatchLaterButton.setPressed(true);
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:

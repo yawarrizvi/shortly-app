@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,14 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     Spinner mGenreSpinner;
     Spinner mDurationSpinner;
 
-    int mSelectedGenreId;
-    int mSelectedDurationId;
+    int mSelectedGenreId = -1;
+    int mSelectedDurationId = -1;
+
+    List<String> mGenreStringList;
+    List<String> mDurationStringList;
+
+    HashMap<String, Integer> mGenreMap;
+    HashMap<String, Integer> mDurationMap;
 
 
     /**
@@ -84,6 +91,17 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGenreStringList = new ArrayList<>();
+        mDurationStringList = new ArrayList<>();
+
+        mGenreList = new ArrayList<>();
+        mGenreList.add(0, getDefaultGenre());
+
+        mDurationList = new ArrayList<>();
+        mDurationList.add(0, getDefaultDuration());
+
+        mGenreMap = new HashMap<>();
+        mDurationMap = new HashMap<>();
 
         mItems = new ArrayList<>();
         if (getArguments() != null) {
@@ -148,7 +166,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
 
             //fetch new data when only 10 items left at bottom
-            if (mItems.size() > 0 && (totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 12))) {
+            if (mItems.size() > 0 && (totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < 6) && (mTotalRecords > (pageIndex * 12))) {
                 //getVideoList(pageIndex);
                 Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
                 searchData(false);
@@ -215,7 +233,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
                     });
                     //TODO: use this call for search
                     if (mSearchTerm != null) {
-                        APICalls.fetchSearchResults(mSearchTerm, -1, -1, getContext(), pageIndex);
+                        APICalls.fetchSearchResults(mSearchTerm, mSelectedGenreId, mSelectedDurationId, getContext(), pageIndex);
                     }
                 }
             }.start();
@@ -248,8 +266,10 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-//        mSearchTerm = newText;
-//        searchData(true);
+        if (!mSearchTerm.isEmpty() && newText.isEmpty()) {
+            mSearchTerm = newText;
+            searchData(true);
+        }
         return false;
     }
 
@@ -281,9 +301,9 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
                         public void onAPIResult(int result, Object resultObject, int totalRecords) {
                             switch (result) {
                                 case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                    HashMap<String, Object> searchOptions = new HashMap<>();
-                                    mGenreList = (List<GenreListResponse>) searchOptions.get("categories");
-                                    mDurationList = (List<DurationResponse>) searchOptions.get("durations");
+                                    HashMap<String, Object> searchOptions = (HashMap<String, Object>) resultObject;
+                                    mGenreList.addAll((List<GenreListResponse>) searchOptions.get("categories"));
+                                    mDurationList.addAll((List<DurationResponse>) searchOptions.get("durations"));
                                     setSearchFilters();
                                     ProgressHandler.hideProgressDialogue();
                                     break;
@@ -309,18 +329,35 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
     private void setSearchFilters() {
 
+        for (int i = 0; i < mGenreList.size(); i++) {
+            GenreListResponse item = mGenreList.get(i);
+            mGenreStringList.add(i,item.getName());
+            mGenreMap.put(item.getName(), item.getCategoryId());
+        }
+
+        for (int i = 0; i < mDurationList.size(); i++) {
+            DurationResponse item = mDurationList.get(i);
+            mDurationStringList.add(i,item.getTitle());
+            mDurationMap.put(item.getTitle(), item.getDurationId());
+        }
+
         // Create an ArrayAdapter using the string array and a default mGenreSpinner layout
+
+        ArrayAdapter<String> genreAdapter= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, mGenreStringList);
+        genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGenreSpinner.setAdapter(genreAdapter);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.genre_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the mGenreSpinner
-        mGenreSpinner.setAdapter(adapter);
+
 //        mGenreSpinner.setLayoutMode(La);
         mGenreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+               getSelectedGenreId(mGenreSpinner.getSelectedItem().toString());
+                Log.v("","");
             }
 
             @Override
@@ -329,15 +366,20 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             }
         });
 
+
+        ArrayAdapter<String> durationAdapter= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, mDurationStringList);
+        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDurationSpinner.setAdapter(durationAdapter);
 
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
                 R.array.duration_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mDurationSpinner.setAdapter(adapter2);
+//        mDurationSpinner.setAdapter(adapter2);
         mDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Log.v("","");
+                getSelectedDurationId(mDurationSpinner.getSelectedItem().toString());
             }
 
             @Override
@@ -345,5 +387,30 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
             }
         });
+    }
+
+    private DurationResponse getDefaultDuration() {
+        DurationResponse durationResponse = new DurationResponse();
+        durationResponse.setTitle("Duration");
+        durationResponse.setDurationId(-1);
+
+        return durationResponse;
+    }
+
+    private GenreListResponse getDefaultGenre() {
+        GenreListResponse genreListResponse = new GenreListResponse();
+        genreListResponse.setName("Genre");
+        genreListResponse.setCategoryId(-1);
+        genreListResponse.setOrder(0);
+        return genreListResponse;
+    }
+
+    private void getSelectedDurationId(String selectedDuration) {
+        mSelectedDurationId = mDurationMap.get(selectedDuration);
+
+    }
+
+    private void getSelectedGenreId(String selectedGenre) {
+        mSelectedGenreId = mGenreMap.get(selectedGenre);
     }
 }

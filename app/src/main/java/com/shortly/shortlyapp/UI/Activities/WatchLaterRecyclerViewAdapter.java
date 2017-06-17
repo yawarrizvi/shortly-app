@@ -46,7 +46,9 @@ public class WatchLaterRecyclerViewAdapter extends RecyclerView.Adapter<WatchLat
         WatchLaterResponse videoResponse = mValues.get(position);
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(videoResponse.getTitle());
-        holder.mContentView.setText("by: " + videoResponse.getCasts());
+        if (videoResponse.getCasts() != null && !videoResponse.getCasts().isEmpty()) {
+            holder.mContentView.setText("by: " + videoResponse.getCasts());
+        }
         Picasso.with(mContext).load(videoResponse.getThumbnails()).into(holder.mImageView);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
