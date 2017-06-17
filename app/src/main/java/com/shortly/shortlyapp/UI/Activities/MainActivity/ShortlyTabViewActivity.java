@@ -1,6 +1,7 @@
 package com.shortly.shortlyapp.UI.Activities.MainActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.CustomViewPager;
+import com.shortly.shortlyapp.UI.Activities.ProfileFragment;
 import com.shortly.shortlyapp.UI.Activities.SearchListFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
@@ -34,7 +36,7 @@ import com.shortly.shortlyapp.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShortlyTabViewActivity extends AppCompatActivity implements SearchListFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener {
+public class ShortlyTabViewActivity extends AppCompatActivity implements SearchListFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -110,8 +112,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
 //                    getWatchLaterList();
                 } else {
 
-//                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
-//                    startActivity(intent);
                 }
             }
 
@@ -198,37 +198,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
         }.start();
     }
 
-    private void searchData() {
-
-        new Thread() {
-            public void run() {
-                APICalls.setSyncInterface(new SyncInterface() {
-                    @Override
-                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
-                        switch (result) {
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-//                                mSearchList = (List<VideoDetailResponse>) resultObject;
-                                updateSearchListData((List<VideoDetailResponse>) resultObject);
-                                mSearchListCount = totalRecords;
-                                Log.v("", "Search Complete");
-                                break;
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                showError(result);
-                                break;
-                            default:
-                                ProgressHandler.hideProgressDialogue();
-                                break;
-                        }
-                    }
-                });
-                APICalls.fetchSearchResults("", -1, -1, ShortlyTabViewActivity.this);
-            }
-        }.start();
-    }
-
     private void showError(int errorType) {
         final String message;
         switch (errorType) {
@@ -293,6 +262,11 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
         showVideoDetail(item.getVideoId());
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -353,9 +327,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
             } else if (position == 2) {
                 return WatchLaterFragment.newInstance(1, mWatchLaterList);
             } else {
-                return PlaceholderFragment.newInstance(position + 1);
+                return ProfileFragment.newInstance("abc","xyz");
             }
-
         }
 
         @Override
