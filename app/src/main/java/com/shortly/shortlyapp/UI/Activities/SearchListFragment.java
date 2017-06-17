@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shortly.shortlyapp.Interfaces.SyncInterface;
@@ -345,6 +346,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         ArrayAdapter<String> genreAdapter= new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, mGenreStringList);
         genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         mGenreSpinner.setAdapter(genreAdapter);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.genre_array, android.R.layout.simple_spinner_item);
@@ -357,6 +359,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                getSelectedGenreId(mGenreSpinner.getSelectedItem().toString());
+                ((TextView) adapterView.getChildAt(0)).setTextColor(getContext().getColor(R.color.primary_text_color));
                 Log.v("","");
             }
 
@@ -380,6 +383,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.v("","");
                 getSelectedDurationId(mDurationSpinner.getSelectedItem().toString());
+                ((TextView) adapterView.getChildAt(0)).setTextColor(getContext().getColor(R.color.primary_text_color));
             }
 
             @Override
