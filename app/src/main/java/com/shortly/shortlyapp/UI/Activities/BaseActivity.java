@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+import com.shortly.shortlyapp.DataProvider.Prefs;
+
 import butterknife.ButterKnife;
 
 /**
@@ -23,6 +25,9 @@ public class BaseActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+
+        Prefs pref = Prefs.getInstance(this);
+        pref.putAuthenticationToken("$2y$10$jRlduTUueXDxgSiDPo8Az.1XUMfENNDzCX1cJQjIKWLrZBpAF3LQ6");
 
     }
 

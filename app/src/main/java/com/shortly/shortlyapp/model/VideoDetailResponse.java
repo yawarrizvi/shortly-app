@@ -1,10 +1,13 @@
 package com.shortly.shortlyapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by yarizvi on 07/06/2017.
  */
 
-public class VideoDetailResponse {
+public class VideoDetailResponse implements Parcelable {
     private Integer videoId;
     private Integer userId;
     private Object categoryId;
@@ -30,6 +33,29 @@ public class VideoDetailResponse {
     private String category;
     private String thumbnails;
     private int time;
+
+    public VideoDetailResponse(){
+
+    }
+
+    protected VideoDetailResponse(Parcel in) {
+        videoId = in.readInt();
+        casts = in.readString();
+        title = in.readString();
+        path = in.readString();
+    }
+
+    public static final Creator<VideoDetailResponse> CREATOR = new Creator<VideoDetailResponse>() {
+        @Override
+        public VideoDetailResponse createFromParcel(Parcel in) {
+            return new VideoDetailResponse(in);
+        }
+
+        @Override
+        public VideoDetailResponse[] newArray(int size) {
+            return new VideoDetailResponse[size];
+        }
+    };
 
     public int getTime() {
         return time;
@@ -232,6 +258,20 @@ public class VideoDetailResponse {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(videoId);
+        parcel.writeString(title);
+        parcel.writeString(casts);
+        parcel.writeString(path);
+
     }
 
     /*public User getUser() {

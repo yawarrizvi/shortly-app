@@ -64,7 +64,7 @@ public class WatchLaterRecyclerViewAdapter extends RecyclerView.Adapter<WatchLat
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        //TODO: set ids in layout and cast here and set data.
+        //TODO: set ids in layout and cast here and set data.\
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;

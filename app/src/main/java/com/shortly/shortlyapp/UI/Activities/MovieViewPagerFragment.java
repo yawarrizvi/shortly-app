@@ -17,12 +17,14 @@ import com.squareup.picasso.Picasso;
 
 public class MovieViewPagerFragment extends Fragment {
 
-    private static VideoDetailResponse mItem;
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_PAGER_ITEM = "pager_item";
+
+
 
     public MovieViewPagerFragment() {
     }
@@ -35,7 +37,8 @@ public class MovieViewPagerFragment extends Fragment {
         MovieViewPagerFragment fragment = new MovieViewPagerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        mItem = item;
+        args.putParcelable(ARG_PAGER_ITEM, item);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +46,8 @@ public class MovieViewPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        final VideoDetailResponse mItem = getArguments().getParcelable(ARG_PAGER_ITEM);
         View rootView = inflater.inflate(R.layout.fragment_movie_pager_view, container, false);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.img_view_thumbnail);
         TextView textView = (TextView) rootView.findViewById(R.id.title);
