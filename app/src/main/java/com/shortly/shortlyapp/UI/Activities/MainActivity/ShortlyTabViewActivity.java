@@ -102,12 +102,12 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
                 mSelectedTabIndex = tabPosition;
                 mViewPager.setCurrentItem(tabPosition, false);
                 if (tabPosition == 0) {
-                    getVideoList(false);
+//                    getVideoList(false);
                 } else if (tabPosition == 1) {
 //                    ProgressHandler.showProgressDialog(ShortlyTabViewActivity.this, "", "An error occured on server.", 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
-                    searchData();
+//                    searchData();
                 } else if (tabPosition == 2) {
-                    getWatchLaterList();
+//                    getWatchLaterList();
                 } else {
 
 //                    Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);

@@ -9,10 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.shortly.shortlyapp.Interfaces.SyncInterface;
+import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
+import com.shortly.shortlyapp.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +32,17 @@ public class SearchListFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 2;
+    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private static List<VideoDetailResponse> mItems;
+    private  List<VideoDetailResponse> mItems;
+    SearchListRecyclerViewAdapter mAdapter;
+
+    int mTotalRecords = 0;
+    int pageIndex = 2;
+    int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
+
+    LinearLayoutManager mLinearLayoutManager;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +57,6 @@ public class SearchListFragment extends Fragment {
         SearchListFragment fragment = new SearchListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        mItems = items;
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,6 +64,9 @@ public class SearchListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mItems = new ArrayList<>();
+//        searchData();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -67,15 +83,83 @@ public class SearchListFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mLinearLayoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(mLinearLayoutManager);
+                recyclerView.addOnScrollListener(mScrollListener);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SearchListRecyclerViewAdapter(getContext(), mItems, mListener));
+            if (mAdapter == null) {
+                mAdapter = new SearchListRecyclerViewAdapter(getContext(), mItems, mListener);
+            }
+            recyclerView.setAdapter(mAdapter);
+
         }
         return view;
     }
 
+
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView mRecyclerView, int newState) {
+            super.onScrollStateChanged(mRecyclerView, newState);
+
+            visibleItemCount = mRecyclerView.getChildCount(); // total items visible
+            totalItemCount = mLinearLayoutManager.getItemCount(); //total current items
+            previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
+
+            //fetch new data when only 10 items left at bottom
+            if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 12))) {
+                //getVideoList(pageIndex);
+                Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
+            super.onScrolled(mRecyclerView, dx, dy);
+        }
+    };
+
+    private void searchData(final String searchTerm) {
+
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+//                                mSearchList = (List<VideoDetailResponse>) resultObject;
+                                List<VideoDetailResponse> res = (List<VideoDetailResponse>) resultObject;
+                                mTotalRecords = totalRecords;
+                                if (res.size() > 0) {
+                                    mItems.addAll(res);
+                                    pageIndex++;
+                                    mAdapter.notifyDataSetChanged();
+                                }
+
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                break;
+                            default:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                        }
+                    }
+                });
+                //TODO: use this call for search
+                if (searchTerm != null) {
+                    APICalls.fetchSearchResults(searchTerm, -1, -1, getContext(), 1);
+                }
+            }
+        }.start();
+    }
 
     @Override
     public void onAttach(Context context) {

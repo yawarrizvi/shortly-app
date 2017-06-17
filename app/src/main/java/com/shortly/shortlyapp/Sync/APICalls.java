@@ -269,7 +269,8 @@ public class APICalls {
         }
     }
 
-    public static void fetchSearchResults(final String query, final int categoryId, final int durationId, final Context context) {
+    public static void fetchSearchResults(final String query, final int categoryId, final int durationId, final Context context, int pageNumber) {
+        cancelAllRequests();
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
