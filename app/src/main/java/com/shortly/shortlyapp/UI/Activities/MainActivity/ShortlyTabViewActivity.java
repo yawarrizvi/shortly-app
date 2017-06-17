@@ -86,7 +86,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_list));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_search));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_watch_later));
-//        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_settings));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.selector_tab_settings));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 
@@ -105,7 +105,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                 if (tabPosition == 0) {
                     getVideoList(false);
                 } else if (tabPosition == 1) {
-                    ProgressHandler.showProgressDialog(ShortlyTabViewActivity.this, "", "An error occured on server.", 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
+//                    ProgressHandler.showProgressDialog(ShortlyTabViewActivity.this, "", "An error occured on server.", 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
                     searchData();
                 } else if (tabPosition == 2) {
                     getWatchLaterList();
@@ -370,8 +370,8 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 4 total pages.
+            return 4;
         }
 
         @Override
@@ -406,38 +406,44 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     }
 
     private void updateVideoListData(ArrayList<Object> newResult) {
-        if (mVideoListData == null || mVideoListData.size() == 0) {
+        mVideoListData = newResult;
+        /*if (mVideoListData == null || mVideoListData.size() == 0) {
             mVideoListData = newResult;
         } else {
-            newResult.remove(0);
-            newResult.remove(1);
-            mVideoListData.addAll(newResult);
-            mSectionsPagerAdapter.notifyDataSetChanged();
+            if (!mVideoListData.equals(newResult)) {
+                newResult.remove(0);
+                newResult.remove(1);
+                mVideoListData.addAll(newResult);
+                mSectionsPagerAdapter.notifyDataSetChanged();
+            }
             //TODO: update recycler view
-        }
-
+        }*/
     }
 
     private void updateWatchLaterListData(List<WatchLaterResponse> newResult) {
-        if (mWatchLaterList == null || mWatchLaterList.size() == 0) {
+        mWatchLaterList = newResult;
+        /*if (mWatchLaterList == null || mWatchLaterList.size() == 0) {
             //
             mWatchLaterList = newResult;
         } else {
-            mWatchLaterList.addAll(newResult);
+            if (!mWatchLaterList.equals(newResult)) {
+                mWatchLaterList.addAll(newResult);
+            }
             mSectionsPagerAdapter.notifyDataSetChanged();
             //TODO: update recycler view
-        }
+        }*/
     }
 
     private void updateSearchListData(List<VideoDetailResponse> newResult) {
-        if (mSearchList == null || mSearchList.size() == 0) {
+        mSearchList = newResult;
+        /*if (mSearchList == null || mSearchList.size() == 0) {
             //
             mSearchList = newResult;
         } else {
             mSearchList.addAll(newResult);
             mSectionsPagerAdapter.notifyDataSetChanged();
             //TODO: update recycler view
-        }
+        }*/
     }
 
     private boolean isLoadMoreButtonRequired(int type) {
@@ -445,12 +451,11 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
         if (type == 1) {
             isRequired = (mVideoListCount > (mVideoListPageNumber * 10));
-        } else if (type == 2){
+        } else if (type == 2) {
             isRequired = (mWatchLaterListCount > (mWatchLaterPageNumber * 10));
         } else {
             isRequired = (mSearchListCount > (mSearchPageNumber * 12));
         }
-
         return isRequired;
     }
 }

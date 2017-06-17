@@ -641,7 +641,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      */
     public void setCurrentTime(int current) {
 
-        if (isPrepared&& mPlayer!=null) {
+        if (/*isPrepared&&*/ mPlayer!=null) {
             if (current != mPlayer.getDuration()) {
                 this.mCurrentTime = current;
             } else {

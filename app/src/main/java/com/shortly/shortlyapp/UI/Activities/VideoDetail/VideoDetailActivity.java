@@ -348,6 +348,36 @@ public class VideoDetailActivity extends BaseActivity {
         }.start();
     }
 
+    public void updateVideoEnd() {
+        ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+//                                showResponse("Video added to watch later list!");
+                                mWatchLaterButton.setPressed(true);
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                showError(result);
+                                break;
+                            default:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                        }
+                        setButtonConfig();
+                    }
+                });
+                APICalls.pushVideoEnd(mVideoId, VideoDetailActivity.this);
+            }
+        }.start();
+    }
+
     private void showError(int errorType) {
         final String message;
         switch (errorType) {

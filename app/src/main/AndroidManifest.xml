@@ -47,11 +47,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Activities.VideoDetail.VideoDetailActivity"
-            android:label="@string/title_activity_video_detail"
             android:alwaysRetainTaskState="true"
             android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_video_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UI.Activities.Settings.ProfileActivity"></activity>
     </application>
 
 </manifest>
