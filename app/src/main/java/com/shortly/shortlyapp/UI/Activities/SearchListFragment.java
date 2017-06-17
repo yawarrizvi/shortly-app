@@ -50,6 +50,8 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     int pageIndex = 1;
     int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
+    boolean mIsViewVisible;
+
     LinearLayoutManager mLinearLayoutManager;
 
     List<DurationResponse> mDurationList;
@@ -87,11 +89,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
-        if (mGenreList == null || mGenreList.size() == 0 || mDurationList == null || mDurationList.size() == 0) {
-//            ProgressHandler.showProgressDialog(getContext(), getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
-//            fetchSurveyFilters();
-        }
+        fetchSurveyFilters();
     }
 
     @Override
@@ -113,45 +111,8 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
          * Code For Spinner
          */
 
-        Spinner spinner = (Spinner) view.findViewById(R.id.genre);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.genre_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-//        spinner.setLayoutMode(La);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-        Spinner spinner2 = (Spinner) view.findViewById(R.id.duration);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
-                R.array.duration_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter2);
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
+        mGenreSpinner = (Spinner) view.findViewById(R.id.genre);
+        mDurationSpinner = (Spinner) view.findViewById(R.id.duration);
 
         /**
          * Code for Recycler view
@@ -201,9 +162,24 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         }
     };
 
-    private void searchData(final boolean clearData) {
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-        if (SearchListFragment.this.isVisible()) {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        mIsViewVisible = isVisibleToUser;
+        if (isVisibleToUser) {
+            fetchSurveyFilters();
+        } else {
+            // fragment is no longer visible
+        }
+    }
+
+    private void searchData(final boolean clearData) {
+        if (mIsViewVisible) {
             new Thread() {
                 public void run() {
                     APICalls.setSyncInterface(new SyncInterface() {
@@ -294,39 +270,80 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     }
 
     private void fetchSurveyFilters() {
-
-        new Thread() {
-            public void run() {
-                APICalls.setSyncInterface(new SyncInterface() {
-                    @Override
-                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
-                        switch (result) {
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                HashMap<String, Object> searchOptions = new HashMap<>();
-                                mGenreList = (List<GenreListResponse>) searchOptions.get("categories");
-                                mDurationList = (List<DurationResponse>) searchOptions.get("durations");
-                                ProgressHandler.hideProgressDialogue();
-                                break;
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                break;
-                            default:
-                                ProgressHandler.hideProgressDialogue();
-                                break;
-                        }
-                    }
-                });
-                //TODO: use this call for search
-                if (mSearchTerm != null) {
-                    APICalls.getCategoryList(getContext());
-                }
+        if (mIsViewVisible) {
+            if (mGenreList == null || mGenreList.size() == 0 || mDurationList == null || mDurationList.size() == 0) {
+                ProgressHandler.showProgressDialog(getContext(), getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
             }
-        }.start();
+            new Thread() {
+                public void run() {
+                    APICalls.setSyncInterface(new SyncInterface() {
+                        @Override
+                        public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                            switch (result) {
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                    HashMap<String, Object> searchOptions = new HashMap<>();
+                                    mGenreList = (List<GenreListResponse>) searchOptions.get("categories");
+                                    mDurationList = (List<DurationResponse>) searchOptions.get("durations");
+                                    setSearchFilters();
+                                    ProgressHandler.hideProgressDialogue();
+                                    break;
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                    break;
+                                default:
+                                    ProgressHandler.hideProgressDialogue();
+                                    break;
+                            }
+                        }
+                    });
+                    //TODO: use this call for search
+                    if (mSearchTerm != null) {
+                        APICalls.getCategoryList(getContext());
+                    }
+                }
+            }.start();
+        }
     }
 
     private void setSearchFilters() {
 
+        // Create an ArrayAdapter using the string array and a default mGenreSpinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.genre_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the mGenreSpinner
+        mGenreSpinner.setAdapter(adapter);
+//        mGenreSpinner.setLayoutMode(La);
+        mGenreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
+                R.array.duration_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mDurationSpinner.setAdapter(adapter2);
+        mDurationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }

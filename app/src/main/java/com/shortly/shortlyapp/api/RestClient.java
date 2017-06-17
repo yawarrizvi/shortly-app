@@ -180,7 +180,7 @@ public class RestClient {
         Call<WatchLaterDTO> fetchWatchLaterList(@Header("X-Authentication-Token") String authToken, @Field("user_id") int userId, @Field("page") int page);
 
 
-        @POST("api/later/video/list")
+        @POST("api/video/durations")
         @Headers({
                 "Accept:application/json"
         })

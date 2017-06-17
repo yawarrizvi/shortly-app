@@ -1,18 +1,17 @@
 package com.shortly.shortlyapp.UI.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
-import com.shortly.shortlyapp.DataProvider.Prefs;
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.model.LoginResponse;
+import com.shortly.shortlyapp.UI.Activities.Settings.ProfileDetailActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,27 +31,7 @@ public class ProfileFragment extends BaseFragment {
     private String mParam1;
     private String mParam2;
 
-//    @Bind(R.id.txt_username)
-    TextView mTxtViewUsername;
-
-//    @Bind(R.id.txt_login_name)
-    TextView mTxtViewLoginName;
-
-//    @Bind(R.id.txt_website)
-    TextView mTxtViewWebsite;
-
-//    @Bind(R.id.txt_city)
-    TextView mTxtViewCity;
-
-//    @Bind(R.id.txt_email)
-    TextView mTxtViewEmail;
-
-//    @Bind(R.id.txt_gender)
-    TextView mTxtViewGender;
-
-//    @Bind(R.id.txt_phone)
-    TextView mTxtViewPhone;
-
+    RelativeLayout mLayoutProfile;
 
     private OnFragmentInteractionListener mListener;
 
@@ -105,17 +84,14 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mTxtViewUsername = (TextView) view.findViewById(R.id.txt_username);
-        mTxtViewLoginName = (TextView) view.findViewById(R.id.txt_login_name);
-        mTxtViewWebsite = (TextView) view.findViewById(R.id.txt_website);
-        mTxtViewCity = (TextView) view.findViewById(R.id.txt_city);
-        mTxtViewEmail = (TextView) view.findViewById(R.id.txt_email);
-        mTxtViewGender = (TextView) view.findViewById(R.id.txt_gender);
-        mTxtViewPhone = (TextView) view.findViewById(R.id.txt_phone);
-        LoginResponse user = Prefs.getInstance(getContext()).getCurrentUser();
-//        LoginResponse userDetails = user.getResponse().get(0);
-        Log.v("", "");
-        setUserDetails(user);
+        mLayoutProfile = (RelativeLayout) view.findViewById(R.id.layout_profile);
+
+        mLayoutProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProfile();
+            }
+        });
 
     }
 
@@ -151,39 +127,8 @@ public class ProfileFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void setUserDetails(LoginResponse user) {
-
-        //TODO: update field value
-        if (user.getFullName() != null) {
-            mTxtViewUsername.setText(user.getFullName());
-        }
-        if (user.getFullName() != null) {
-            mTxtViewWebsite.setText(user.getFullName());
-        }
-
-        //End TODO
-        if (user.getFullName() != null) {
-            mTxtViewLoginName.setText(user.getFullName());
-        }
-
-        if (user.getCity() != null) {
-            mTxtViewCity.setText(user.getCity());
-        }
-
-        if (user.getEmail() != null) {
-            mTxtViewEmail.setText(user.getEmail());
-        }
-
-        //TODO: confirm gender values
-        double gender = user.getGender();
-        if (gender > 0) {
-            mTxtViewGender.setText("Male");
-        } else {
-            mTxtViewGender.setText("Female");
-        }
-
-        if (user.getPhone() != null) {
-            mTxtViewPhone.setText(user.getPhone());
-        }
+    private void showProfile() {
+        Intent intent = new Intent(getContext(), ProfileDetailActivity.class);
+        startActivity(intent);
     }
 }

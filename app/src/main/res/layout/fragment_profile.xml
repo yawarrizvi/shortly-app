@@ -23,66 +23,50 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profilePictureImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-                android:src="@drawable/ic_profile_default_image"
-                android:visibility="gone"
-                app:civ_border_color="#000"
-                app:civ_border_width="0dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="Change profile photo"
-                android:textAlignment="center"
-                android:textColor="@color/secondary_text_color"
-                android:visibility="gone" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="15dp"
-                android:text="Profile Info"
-                android:textColor="@color/primary_text_color"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
 
             <RelativeLayout
+                android:id="@+id/layout_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp">
 
-                <ImageView
-                    android:id="@+id/ic_icon_username"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_username" />
-
                 <TextView
-                    android:id="@+id/txt_username"
+                    android:id="@+id/txt_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_username"
-                    android:text="Username"
+                    android:text="Profile"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
 
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_username"
+                    android:layout_below="@id/txt_profile"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_contact_us"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/txt_contact_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Contact Us"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/secondary_text_color" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/txt_contact_us"
                     android:layout_marginTop="4dp"
                     android:background="#ccc" />
 
@@ -90,198 +74,49 @@
 
 
             <RelativeLayout
+                android:id="@+id/layout_legal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp">
 
-                <ImageView
-                    android:id="@+id/ic_icon_login_name"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
                 <TextView
-                    android:id="@+id/txt_login_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_login_name"
-                    android:text="Login Name"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_login_name"
-                    android:layout_marginTop="4dp"
-                    android:background="#ccc" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_website"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_website"
+                    android:id="@+id/txt_legal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/ic_icon_website"
-                    android:text="Website"
+                    android:text="Legal"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
 
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_website"
+                    android:layout_below="@id/txt_legal"
                     android:layout_marginTop="4dp"
                     android:background="#ccc" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/layout_about"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp">
 
-                <ImageView
-                    android:id="@+id/ic_icon_info"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
                 <TextView
-                    android:id="@+id/txt_city"
+                    android:id="@+id/txt_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_info"
-                    android:text="City"
+                    android:text="About"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
 
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_info"
-                    android:layout_marginTop="4dp"
-                    android:background="#ccc" />
-            </RelativeLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="15dp"
-                android:text="Privacy"
-                android:textColor="@color/primary_text_color"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_email"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_email_24dp" />
-
-                <TextView
-                    android:id="@+id/txt_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_email"
-                    android:text="Email"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_email"
-                    android:layout_marginTop="4dp"
-                    android:background="#ccc" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_phone"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_phone" />
-
-                <TextView
-                    android:id="@+id/txt_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_phone"
-                    android:text="+4434324438"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color"
-                    android:textSize="13sp" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_phone"
-                    android:layout_marginTop="4dp"
-                    android:background="#ccc" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_gender"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toRightOf="@id/ic_icon_gender"
-                    android:text="Gender"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1px"
-                    android:layout_below="@id/ic_icon_gender"
+                    android:layout_below="@id/txt_about"
                     android:layout_marginTop="4dp"
                     android:background="#ccc" />
             </RelativeLayout>

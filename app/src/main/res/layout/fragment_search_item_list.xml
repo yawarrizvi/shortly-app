@@ -18,7 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="left"
+        android:background="#000"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_below="@id/search_view">
 
         <android.support.v7.widget.AppCompatSpinner
@@ -26,10 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:prompt="@string/action_genre"
+            android:background="@drawable/bg_search_filters"
+            android:textAlignment="center"
             android:spinnerMode="dropdown">
         </android.support.v7.widget.AppCompatSpinner>
 
         <android.support.v7.widget.AppCompatSpinner
+            android:layout_marginLeft="15dp"
             android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
