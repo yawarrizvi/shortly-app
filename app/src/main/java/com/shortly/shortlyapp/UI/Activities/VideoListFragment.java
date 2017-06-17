@@ -9,9 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
+import com.shortly.shortlyapp.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,11 @@ public class VideoListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private static ArrayList<Object> mItems;
+
+    int pageIndex = 1;
+    int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
+
+    LinearLayoutManager mLinearLayoutManager;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,7 +74,9 @@ public class VideoListFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mLinearLayoutManager = new LinearLayoutManager(context);
+                recyclerView.setLayoutManager(mLinearLayoutManager);
+                recyclerView.addOnScrollListener(mScrollListener);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
@@ -108,4 +117,27 @@ public class VideoListFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(VideoDetailResponse item);
     }
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+
+            visibleItemCount = recyclerView.getChildCount(); // total items visible
+            totalItemCount = mLinearLayoutManager.getItemCount(); //total current items
+            previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
+
+            //fetch new data when only 10 items left at bottom
+            if (totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) {
+                //getVideoList(pageIndex);
+                Toast.makeText(getContext(),"Fetch Next Page Data",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
+    };
 }

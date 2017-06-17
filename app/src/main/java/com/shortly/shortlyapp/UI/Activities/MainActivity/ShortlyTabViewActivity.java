@@ -23,7 +23,7 @@ import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.UI.Activities.CustomViewPager;
-import com.shortly.shortlyapp.UI.Activities.ItemFragment;
+import com.shortly.shortlyapp.UI.Activities.SearchListFragment;
 import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.UI.Activities.VideoListFragment;
 import com.shortly.shortlyapp.UI.Activities.WatchLaterFragment;
@@ -35,7 +35,7 @@ import com.shortly.shortlyapp.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener {
+public class ShortlyTabViewActivity extends AppCompatActivity implements SearchListFragment.OnListFragmentInteractionListener, VideoListFragment.OnListFragmentInteractionListener, WatchLaterFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -281,10 +281,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
-    }
 
     @Override
     public void onListFragmentInteraction(WatchLaterResponse item) {
@@ -353,7 +350,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
             } else if (position == 1) {
 
-                return ItemFragment.newInstance(2, mVideoListData);
+                return SearchListFragment.newInstance(2, mSearchList);
 
             } else if (position == 2) {
                 return WatchLaterFragment.newInstance(1, mWatchLaterList);
@@ -436,6 +433,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
 
     private void updateSearchListData(List<VideoDetailResponse> newResult) {
         mSearchList = newResult;
+        mSectionsPagerAdapter.notifyDataSetChanged();
         /*if (mSearchList == null || mSearchList.size() == 0) {
             //
             mSearchList = newResult;

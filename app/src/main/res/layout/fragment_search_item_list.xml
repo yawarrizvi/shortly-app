@@ -9,7 +9,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.shortly.shortlyapp.UI.Activities.ItemFragment"
-    tools:listitem="@layout/fragment_item"
+    tools:context="com.shortly.shortlyapp.UI.Activities.SearchListFragment"
+    tools:listitem="@layout/fragment_search_item"
     android:padding="5dp"
     android:background="#000"/>

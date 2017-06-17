@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.ItemFragment.OnListFragmentInteractionListener;
+import com.shortly.shortlyapp.UI.Activities.SearchListFragment.OnListFragmentInteractionListener;
 import com.shortly.shortlyapp.UI.Activities.dummy.DummyContent.DummyItem;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
 import com.squareup.picasso.Picasso;

@@ -1,10 +1,13 @@
 package com.shortly.shortlyapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by yarizvi on 07/06/2017.
  */
 
-public class WatchLaterResponse {
+public class WatchLaterResponse implements Parcelable {
     private Integer videoId;
     private Integer userId;
     private Object categoryId;
@@ -29,6 +32,27 @@ public class WatchLaterResponse {
     //TODO: update boolean to int for later
     private int later;
     private Integer time;
+
+    public WatchLaterResponse(){}
+
+    protected WatchLaterResponse(Parcel in) {
+        videoId = in.readInt();
+        title = in.readString();
+        casts = in.readString();
+        path = in.readString();
+    }
+
+    public static final Creator<WatchLaterResponse> CREATOR = new Creator<WatchLaterResponse>() {
+        @Override
+        public WatchLaterResponse createFromParcel(Parcel in) {
+            return new WatchLaterResponse(in);
+        }
+
+        @Override
+        public WatchLaterResponse[] newArray(int size) {
+            return new WatchLaterResponse[size];
+        }
+    };
 
     public Integer getVideoId() {
         return videoId;
@@ -212,5 +236,18 @@ public class WatchLaterResponse {
 
     public void setTime(Integer time) {
         this.time = time;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(videoId);
+        parcel.writeString(title);
+        parcel.writeString(casts);
+        parcel.writeString(path);
     }
 }

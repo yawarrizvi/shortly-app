@@ -19,6 +19,8 @@ public class Constants {
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_DURATION = "durationId";
 
+    public static final int ITEM_THRESHOLD = 3;
+
 
     public interface ProgressBarStyles {
         int PROGRESS_BAR_NONE = 0;
