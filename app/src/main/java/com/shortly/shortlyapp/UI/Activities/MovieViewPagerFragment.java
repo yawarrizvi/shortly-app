@@ -14,9 +14,6 @@ import com.shortly.shortlyapp.UI.Activities.VideoDetail.VideoDetailActivity;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.squareup.picasso.Picasso;
 
-/**
- * Created by haroonyousuf on 6/15/17.
- */
 
 public class MovieViewPagerFragment extends Fragment {
 
@@ -50,18 +47,20 @@ public class MovieViewPagerFragment extends Fragment {
         ImageView imageView = (ImageView) rootView.findViewById(R.id.img_view_thumbnail);
         TextView textView = (TextView) rootView.findViewById(R.id.title);
         TextView credits = (TextView) rootView.findViewById(R.id.cast);
-        textView.setText(mItem.getTitle());
-        credits.setText(mItem.getCasts());
-        Picasso.with(getContext()).load(mItem.getThumbnails()).into(imageView);
+        if (mItem != null) {
+            textView.setText(mItem.getTitle());
+            credits.setText(mItem.getCasts());
+            Picasso.with(getContext()).load(mItem.getThumbnails()).into(imageView);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), VideoDetailActivity.class);
-                intent.putExtra("videoId", mItem.getVideoId());
-                startActivity(intent);
-            }
-        });
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), VideoDetailActivity.class);
+                    intent.putExtra("videoId", mItem.getVideoId());
+                    startActivity(intent);
+                }
+            });
+        }
         return rootView;
     }
 }

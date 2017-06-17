@@ -33,7 +33,7 @@ public class ProgressHandler {
 
 
     public static void showProgressDialog(Context context, String title, String message, int progress, int progressBarStyle, String positiveButtonTitle, String negativeButtonTitle) {
-
+//ProgressHandler.upDateProgressDialog(context, title, message, progress, progressBarStyle, positiveButtonTitle, negativeButtonTitle);
         if (mHandler != null) {
             mHandler = null;
         }
@@ -46,6 +46,7 @@ public class ProgressHandler {
             mPositiveButton = null;
             mNegativeButton = null;
         }
+
 
         View view = (View) LayoutInflater.from(context).inflate(R.layout.view_pogress_dialogue, null);
 

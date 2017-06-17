@@ -8,9 +8,6 @@ import com.shortly.shortlyapp.model.VideoDetailResponse;
 
 import java.util.List;
 
-/**
- * Created by haroonyousuf on 6/15/17.
- */
 
 public class MoviesViewPagerAdapter extends FragmentStatePagerAdapter {
     List<VideoDetailResponse> mItems;

@@ -30,7 +30,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.tasks.GetVideoFirstFrameTask;
 
@@ -240,6 +239,18 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     public void setVideoPath(String videoPath, boolean needFirstFrame, Activity activity) {
         mVideoPath = videoPath;
 
+        if (mActivity == null) {
+            if (activity != null) {
+                mActivity = activity;
+            }
+        }
+
+        if (mActivity != null) {
+            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+
+
+
         if (needFirstFrame) {
             new GetVideoFirstFrameTask(videoPath, this).execute();
             if (null != mSurfaceView) {
@@ -252,7 +263,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         mCurrentTime = 0;
         mDuration = 0;
         // reset play and pause button and other view
-        mBtnPlay.setVisibility(View.VISIBLE);
+//        mBtnPlay.setVisibility(View.VISIBLE);
         mBtnPause.setVisibility(View.GONE);
 //        mLayoutController.setVisibility(View.GONE);
         mSeekBar.setOnSeekBarChangeListener(mSeekListener);
@@ -340,11 +351,11 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
 
     public void playVideo(Activity activity) {
         Log.d(TAG, "onclick play ");
-        if (mActivity == null) {
-            if (activity != null) {
-                mActivity = activity;
-            }
-        }
+//        if (mActivity == null) {
+//            if (activity != null) {
+//                mActivity = activity;
+//            }
+//        }
         if (null == mPlayer) {
             return;
         }
@@ -417,7 +428,6 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
                 mHandler.postDelayed(mHideRunnable, timeout);
             }
         }
-        ProgressHandler.hideProgressDialogue();
     }
 
     /**
@@ -488,9 +498,9 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
      * prepare video
      */
     public void play() {
-        if (mActivity != null) {
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+//        if (mActivity != null) {
+//            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        }
 
         Activity activity = getParentActivity();
         if (activity != null) {
@@ -547,12 +557,14 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
     }
 
     public void stop() {
+        mActivity = null;
         Log.d(TAG, "stop entry");
         if (mPlayer == null) {
             return;
         }
         // reset player
         mPlayer.stop();
+        mPlayer.reset();
         mPlayer.release();
         mPlayer = null;
 
@@ -669,7 +681,7 @@ public class VideoPlayerView extends RelativeLayout implements View.OnClickListe
         if (null != mPlayer) {
             mPlayer.setDisplay(mSurfaceView.getHolder());
         } else {
-            setVideoPath(mVideoPath, false, null);
+            setVideoPath(mVideoPath, false, mActivity);
         }
     }
 

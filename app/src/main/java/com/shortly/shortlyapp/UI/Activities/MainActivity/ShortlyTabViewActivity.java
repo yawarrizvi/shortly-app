@@ -57,8 +57,13 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
     private int mApiCallCount = 0;
     int mSelectedTabIndex = 0;
 
+    private int mVideoListCount = 0;
+    private int mWatchLaterListCount = 0;
+    private int mSearchListCount = 0;
+
     List<WatchLaterResponse> mWatchLaterList;
     ArrayList<Object> mVideoListData;
+    List<VideoDetailResponse> mSearchList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +106,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     getVideoList(false);
                 } else if (tabPosition == 1) {
                     ProgressHandler.showProgressDialog(ShortlyTabViewActivity.this, "", "An error occured on server.", 0, Constants.ProgressBarStyles.PROGRESS_BAR_NONE, getString(R.string.button_title_ok), "");
-//                    searchData();
+                    searchData();
                 } else if (tabPosition == 2) {
                     getWatchLaterList();
                 } else {
@@ -132,7 +137,9 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                mVideoListData = (ArrayList<Object>) resultObject;
+//                                mVideoListData = (ArrayList<Object>) resultObject;
+                                updateVideoListData((ArrayList<Object>) resultObject);
+                                mVideoListCount = totalRecords;
                                 mSectionsPagerAdapter.notifyDataSetChanged();
                                 if (fetchWatchLaterData) {
                                     getWatchLaterList();
@@ -166,7 +173,9 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                mWatchLaterList = (List<WatchLaterResponse>) resultObject;
+//                                mWatchLaterList = (List<WatchLaterResponse>) resultObject;
+                                updateWatchLaterListData((List<WatchLaterResponse>) resultObject);
+                                mWatchLaterListCount = totalRecords;
                                 //TODO: update recycler view
                                 hideLoader();
                                 Log.v("", "Watch Later Complete");
@@ -200,7 +209,9 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
                     public void onAPIResult(int result, Object resultObject, int totalRecords) {
                         switch (result) {
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
-                                List<VideoDetailResponse> resultData = (List<VideoDetailResponse>) resultObject;
+//                                mSearchList = (List<VideoDetailResponse>) resultObject;
+                                updateSearchListData((List<VideoDetailResponse>) resultObject);
+                                mSearchListCount = totalRecords;
                                 Log.v("", "Search Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -338,7 +349,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
             // Return a PlaceholderFragment (defined as a static inner class below).
 
             if (position == 0) {
-                return VideoListFragment.newInstance(1,mVideoListData);
+                return VideoListFragment.newInstance(1, mVideoListData);
 
             } else if (position == 1) {
 
@@ -392,5 +403,54 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements ItemFra
         Intent intent = new Intent(ShortlyTabViewActivity.this, VideoDetailActivity.class);
         intent.putExtra("videoId", videoId);
         startActivity(intent);
+    }
+
+    private void updateVideoListData(ArrayList<Object> newResult) {
+        if (mVideoListData == null || mVideoListData.size() == 0) {
+            mVideoListData = newResult;
+        } else {
+            newResult.remove(0);
+            newResult.remove(1);
+            mVideoListData.addAll(newResult);
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            //TODO: update recycler view
+        }
+
+    }
+
+    private void updateWatchLaterListData(List<WatchLaterResponse> newResult) {
+        if (mWatchLaterList == null || mWatchLaterList.size() == 0) {
+            //
+            mWatchLaterList = newResult;
+        } else {
+            mWatchLaterList.addAll(newResult);
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            //TODO: update recycler view
+        }
+    }
+
+    private void updateSearchListData(List<VideoDetailResponse> newResult) {
+        if (mSearchList == null || mSearchList.size() == 0) {
+            //
+            mSearchList = newResult;
+        } else {
+            mSearchList.addAll(newResult);
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            //TODO: update recycler view
+        }
+    }
+
+    private boolean isLoadMoreButtonRequired(int type) {
+        boolean isRequired = false;
+
+        if (type == 1) {
+            isRequired = (mVideoListCount > (mVideoListPageNumber * 10));
+        } else if (type == 2){
+            isRequired = (mWatchLaterListCount > (mWatchLaterPageNumber * 10));
+        } else {
+            isRequired = (mSearchListCount > (mSearchPageNumber * 12));
+        }
+
+        return isRequired;
     }
 }

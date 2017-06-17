@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@android:color/transparent"
-        android:src="@mipmap/btn_play_white" />
+        android:src="@mipmap/btn_play_white"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnPause"

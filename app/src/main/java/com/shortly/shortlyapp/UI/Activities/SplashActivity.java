@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.Login.LoginActivity;
+import com.shortly.shortlyapp.UI.Activities.MainActivity.ShortlyTabViewActivity;
 
 /**
  * Created by yarizvi on 05/06/2017.
@@ -50,8 +50,8 @@ public class SplashActivity extends BaseActivity {
                     e.printStackTrace();
                 } finally {
                     if (!mIsBackPressed) {
-                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//                        Intent intent = new Intent(SplashActivity.this, ShortlyTabViewActivity.class);
+//                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, ShortlyTabViewActivity.class);
 
                         startActivity(intent);
                     }

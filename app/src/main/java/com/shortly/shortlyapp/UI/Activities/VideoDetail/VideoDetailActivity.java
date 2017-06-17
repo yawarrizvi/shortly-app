@@ -1,8 +1,10 @@
 package com.shortly.shortlyapp.UI.Activities.VideoDetail;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +32,8 @@ public class VideoDetailActivity extends BaseActivity {
     private boolean mIsVideoLiked;
     private int mIsWatchLater;
     int mVideoPlayTime;
-
+    private static Handler mHandler;
+    public Activity mActivity;
 
     @Bind(R.id.empty_view_layout)
     LinearLayout mEmptyViewLayout;
@@ -67,7 +70,7 @@ public class VideoDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_detail);
-
+        mActivity = VideoDetailActivity.this;
         Intent intent = this.getIntent();
         if (intent.hasExtra("videoId")) {
             mVideoId = intent.getIntExtra("videoId", 0);
@@ -80,13 +83,14 @@ public class VideoDetailActivity extends BaseActivity {
         mVideoPlayerView = (VideoPlayerView) findViewById(R.id.videoView);
         mVideoPlayerView.setVisibility(View.GONE);
 
-        //get video id from intent
         mVideoDetailLayout.setVisibility(View.GONE);
         fetchVideoDetails();
         mImageViewThumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playVideo();
+//                prepareVideo();
+
             }
         });
         mLikeButton.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +196,8 @@ public class VideoDetailActivity extends BaseActivity {
         }
     }
 
+
+
     private void playVideo() {
         String videoPath = mVideoDetail.getPath();
         if (videoPath != null && !videoPath.isEmpty()) {
@@ -201,10 +207,59 @@ public class VideoDetailActivity extends BaseActivity {
 
             mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
             mVideoPlayerView.setCurrentTime(mVideoPlayTime);
-            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+//            ProgressHandler.showProgressDialog(this, getString(R.string.app_name), "Processing...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
             mVideoPlayerView.playVideo(VideoDetailActivity.this);
         }
     }
+
+//    private void prepareVideo() {
+//        if (mHandler != null) {
+//            mHandler = null;
+//        }
+//        mHandler = new Handler(this.getMainLooper());
+//        Runnable changeMessage = new Runnable() {
+//            @Override
+//            public void run() {
+//                mVideoDetailLayout.setVisibility(View.GONE);
+//                mEmptyViewLayout.setVisibility(View.GONE);
+//                mVideoPlayerView.setVisibility(View.VISIBLE);
+//                playVideo();
+//            }
+//        };
+//        mHandler.post(changeMessage);
+//    }
+//
+//    private void playVideo() {
+//        final String videoPath = mVideoDetail.getPath();
+//        /*if (videoPath != null && !videoPath.isEmpty()) {
+//            mVideoPlayerView.setVideoPath(videoPath, false, VideoDetailActivity.this);
+//            mVideoPlayerView.setCurrentTime(mVideoPlayTime);
+//            startVideo();
+//        }*/
+//        new Thread() {
+//            public void run() {
+//                if (videoPath != null && !videoPath.isEmpty()) {
+//                    mVideoPlayerView.setVideoPath(videoPath, false, mActivity);
+//                    mVideoPlayerView.setCurrentTime(mVideoPlayTime);
+//                    startVideo();
+//                }
+//            }
+//        }.start();
+//    }
+//
+//    private void startVideo() {
+//        if (mHandler != null) {
+//            mHandler = null;
+//        }
+//        mHandler = new Handler(this.getMainLooper());
+//        Runnable changeMessage = new Runnable() {
+//            @Override
+//            public void run() {
+//                mVideoPlayerView.playVideo(VideoDetailActivity.this);
+//            }
+//        };
+//        mHandler.post(changeMessage);
+//    }
 
     private void likeVideo() {
         if (!mVideoDetail.getLiked()) {

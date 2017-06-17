@@ -26,7 +26,8 @@ public class WatchLaterResponse {
     private String jobId;
     private String videoLink;
     private Object allowCountry;
-    private Boolean later;
+    //TODO: update boolean to int for later
+    private int later;
     private Integer time;
 
     public Integer getVideoId() {
@@ -197,11 +198,11 @@ public class WatchLaterResponse {
         this.allowCountry = allowCountry;
     }
 
-    public Boolean getLater() {
+    public int getLater() {
         return later;
     }
 
-    public void setLater(Boolean later) {
+    public void setLater(int later) {
         this.later = later;
     }
 
