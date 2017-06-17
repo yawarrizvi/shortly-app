@@ -8,7 +8,7 @@ public class LoginResponse {
 
     private Integer userId;
     private Object type;
-    private Object gender;
+    private double gender;
     private Object fullName;
     private Object country;
     private Object city;
@@ -39,16 +39,21 @@ public class LoginResponse {
         this.type = type;
     }
 
-    public Object getGender() {
+    public double getGender() {
         return gender;
     }
 
-    public void setGender(Object gender) {
+    public void setGender(double gender) {
         this.gender = gender;
     }
 
-    public Object getFullName() {
-        return fullName;
+    public String getFullName() {
+        if (fullName == null){
+            return "";
+        }
+        else {
+            return (String) fullName;
+        }
     }
 
     public void setFullName(Object fullName) {
@@ -63,8 +68,12 @@ public class LoginResponse {
         this.country = country;
     }
 
-    public Object getCity() {
-        return city;
+    public String getCity() {
+        if (city == null) {
+            return "";
+        } else {
+            return (String) city;
+        }
     }
 
     public void setCity(Object city) {
@@ -79,8 +88,12 @@ public class LoginResponse {
         this.address = address;
     }
 
-    public Object getPhone() {
-        return phone;
+    public String getPhone() {
+        if (phone == null) {
+            return "";
+        } else {
+            return (String) phone;
+        }
     }
 
     public void setPhone(Object phone) {

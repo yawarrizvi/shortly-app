@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Shortly</string>
     <string name="action_settings">Settings</string>
+    <string name="action_genre">Genre</string>
+    <string name="action_duration">Duration</string>
     <string name="title_activity_shortly_tab_view">ShortlyTabViewActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_login">" "</string>

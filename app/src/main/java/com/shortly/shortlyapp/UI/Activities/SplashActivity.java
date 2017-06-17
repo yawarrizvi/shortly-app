@@ -2,10 +2,9 @@ package com.shortly.shortlyapp.UI.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.shortly.shortlyapp.R;
-import com.shortly.shortlyapp.UI.Activities.MainActivity.ShortlyTabViewActivity;
+import com.shortly.shortlyapp.UI.Activities.Login.LoginActivity;
 
 /**
  * Created by yarizvi on 05/06/2017.
@@ -21,18 +20,6 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         mIsBackPressed = false;
 
-        Log.v("", "-----------------------------------");
-
-        /*final int mAppServerVersion =  Prefs.getInstance(this).getAppServerVersion(0);
-        final int mIsUpdateAvailable =  Utilities.updateRequired(mAppServerVersion);
-        final int mForcedUpdateRequired =  Prefs.getInstance(this).getIsForcedUpdateRequired(0);*/
-
-        /**
-         * Solution:http://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508#16447508
-         *
-         * https://code.google.com/p/android/issues/detail?id=2373
-         * https://code.google.com/p/android/issues/detail?id=26658
-         */
         if (!isTaskRoot()) {
             // Android launched another instance of the root activity into an existing task
             //  so just quietly finish and go away, dropping the user back into the activity
@@ -49,8 +36,8 @@ public class SplashActivity extends BaseActivity {
                     e.printStackTrace();
                 } finally {
                     if (!mIsBackPressed) {
-//                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                        Intent intent = new Intent(SplashActivity.this, ShortlyTabViewActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                        Intent intent = new Intent(SplashActivity.this, ShortlyTabViewActivity.class);
 
                         startActivity(intent);
                     }

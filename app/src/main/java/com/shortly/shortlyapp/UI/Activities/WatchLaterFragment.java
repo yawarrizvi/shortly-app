@@ -9,9 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.shortly.shortlyapp.Interfaces.SyncInterface;
 import com.shortly.shortlyapp.R;
+import com.shortly.shortlyapp.Sync.APICalls;
 import com.shortly.shortlyapp.model.WatchLaterResponse;
+import com.shortly.shortlyapp.utils.Constants;
 
 import java.util.List;
 
@@ -30,6 +34,13 @@ public class WatchLaterFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private static List<WatchLaterResponse> mItems;
+    RecyclerView mRecyclerView;
+    LinearLayoutManager mLinearLayoutManager;
+    WatchLaterRecyclerViewAdapter mAdapter;
+
+    int mTotalRecords = 0;
+    int pageIndex = 2;
+    int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,6 +71,12 @@ public class WatchLaterFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_watch_later_list, container, false);
@@ -67,17 +84,79 @@ public class WatchLaterFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mLinearLayoutManager = new LinearLayoutManager(context);
+                mRecyclerView.setLayoutManager(mLinearLayoutManager);
+                mRecyclerView.addOnScrollListener(mScrollListener);
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
             //TODO: pass data here from api
-            recyclerView.setAdapter(new WatchLaterRecyclerViewAdapter(getContext(), mItems, mListener));
+            if (mAdapter == null) {
+                mAdapter = new WatchLaterRecyclerViewAdapter(getContext(), mItems, mListener);
+            }
+            mRecyclerView.setAdapter(mAdapter);
         }
         return view;
+    }
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView mRecyclerView, int newState) {
+            super.onScrollStateChanged(mRecyclerView, newState);
+
+            visibleItemCount = mRecyclerView.getChildCount(); // total items visible
+            totalItemCount = mLinearLayoutManager.getItemCount(); //total current items
+            previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
+
+            //fetch new data when only 3 items left at bottom
+            if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 10))) {
+                Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
+                getWatchLaterList();
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView mRecyclerView, int dx, int dy) {
+            super.onScrolled(mRecyclerView, dx, dy);
+        }
+    };
+
+
+    private void getWatchLaterList() {
+        if (WatchLaterFragment.this.isVisible()) {
+            new Thread() {
+                public void run() {
+                    APICalls.setSyncInterface(new SyncInterface() {
+                        @Override
+                        public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                            switch (result) {
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                    List<WatchLaterResponse> res = (List<WatchLaterResponse>) resultObject;
+                                    if (res.size() > 0) {
+                                        mItems.addAll(res);
+                                        pageIndex++;
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                    break;
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
+                    APICalls.getWatchLaterVideos(pageIndex, getContext(), true);
+                }
+
+
+            }.start();
+        }
     }
 
 

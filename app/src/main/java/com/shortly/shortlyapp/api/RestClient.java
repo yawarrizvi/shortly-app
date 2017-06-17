@@ -41,9 +41,7 @@ public class RestClient {
     private static final int TIMEOUT = 300; //timeout in seconds
 
     /**
-     * Get the client of FieldForce database
-     *
-     * @return api defined by FFAPIInterface
+     * @return api defined by ShortlyApiInterface
      */
     public static ShortlyApiInterface getShortlyClient(String serviceURL) {
 //        if (iShortlyService != null) {
@@ -156,6 +154,15 @@ public class RestClient {
                 "Accept:application/json"
         })
         Call<MostViewedListDTO> getMostViewedVideos(@Header("X-Authentication-Token") String authToken, @Field("page") int pageNumber);
+
+
+        @FormUrlEncoded
+        @POST("api/mostviewed/videos")
+        @Headers({
+                "Content-Type: application/x-www-form-urlencoded",
+                "Accept:application/json"
+        })
+        Call<MostViewedListDTO> getVideoList(@Header("X-Authentication-Token") String authToken, @Field("page") int pageNumber);
 
         //First Video
         @POST("/api/featured/videos")

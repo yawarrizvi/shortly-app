@@ -18,22 +18,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         android:layout_below="@id/search_view">
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:prompt="@string/action_settings"
-            android:spinnerMode="dialog">
+            android:prompt="@string/action_genre"
+            android:spinnerMode="dropdown">
         </android.support.v7.widget.AppCompatSpinner>
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:prompt="@string/action_settings"
-            android:spinnerMode="dialog">
+            android:prompt="@string/action_duration"
+            android:spinnerMode="dropdown">
         </android.support.v7.widget.AppCompatSpinner>
 
     </LinearLayout>

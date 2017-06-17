@@ -19,10 +19,13 @@ import com.shortly.shortlyapp.Interfaces.SyncInterface;
 import com.shortly.shortlyapp.Logic.ProgressHandler.ProgressHandler;
 import com.shortly.shortlyapp.R;
 import com.shortly.shortlyapp.Sync.APICalls;
+import com.shortly.shortlyapp.model.DurationResponse;
+import com.shortly.shortlyapp.model.GenreListResponse;
 import com.shortly.shortlyapp.model.VideoDetailResponse;
 import com.shortly.shortlyapp.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,7 +41,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private  List<VideoDetailResponse> mItems;
+    private List<VideoDetailResponse> mItems;
     SearchListRecyclerViewAdapter mAdapter;
     SearchView mSearchView;
     String mSearchTerm = "";
@@ -48,6 +51,15 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
     LinearLayoutManager mLinearLayoutManager;
+
+    List<DurationResponse> mDurationList;
+    List<GenreListResponse> mGenreList;
+
+    Spinner mGenreSpinner;
+    Spinner mDurationSpinner;
+
+    int mSelectedGenreId;
+    int mSelectedDurationId;
 
 
     /**
@@ -72,10 +84,13 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         super.onCreate(savedInstanceState);
 
         mItems = new ArrayList<>();
-//        searchData();
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+
+        if (mGenreList == null || mGenreList.size() == 0 || mDurationList == null || mDurationList.size() == 0) {
+//            ProgressHandler.showProgressDialog(getContext(), getString(R.string.app_name), "Loading...", 0, Constants.ProgressBarStyles.PROGRESS_BAR_ANIMATED, "", "");
+//            fetchSurveyFilters();
         }
     }
 
@@ -87,12 +102,12 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         // Set the adapter
         //if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+        Context context = view.getContext();
 
-            //search view
-            mSearchView = (SearchView) view.findViewById(R.id.search_view);
-            mSearchView.setOnQueryTextListener(this);
-            mSearchView.setQueryHint("Enter search term here...");
+        //search view
+        mSearchView = (SearchView) view.findViewById(R.id.search_view);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setQueryHint("Enter search term here...");
 
         /**
          * Code For Spinner
@@ -100,12 +115,13 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
         Spinner spinner = (Spinner) view.findViewById(R.id.genre);
         // Create an ArrayAdapter using the string array and a default spinner layout
-         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                        R.array.genre_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.genre_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+//        spinner.setLayoutMode(La);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -117,7 +133,6 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
             }
         });
-
 
 
         Spinner spinner2 = (Spinner) view.findViewById(R.id.duration);
@@ -138,31 +153,28 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
         });
 
 
-
-
         /**
          * Code for Recycler view
          */
         //list items
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);;
-            if (mColumnCount <= 1) {
-                mLinearLayoutManager = new LinearLayoutManager(context);
-                recyclerView.setLayoutManager(mLinearLayoutManager);
-                recyclerView.addOnScrollListener(mScrollListener);
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            if (mAdapter == null) {
-                mAdapter = new SearchListRecyclerViewAdapter(getContext(), mItems, mListener);
-            }
-            recyclerView.setAdapter(mAdapter);
-
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        ;
+        if (mColumnCount <= 1) {
+            mLinearLayoutManager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(mLinearLayoutManager);
+            recyclerView.addOnScrollListener(mScrollListener);
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        }
+        if (mAdapter == null) {
+            mAdapter = new SearchListRecyclerViewAdapter(getContext(), mItems, mListener);
+        }
+        recyclerView.setAdapter(mAdapter);
 
 
         //}
         return view;
     }
-
 
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -175,7 +187,7 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
             previousVisibleItems = mLinearLayoutManager.findFirstVisibleItemPosition(); //scrolled item count
 
             //fetch new data when only 10 items left at bottom
-            if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 12))) {
+            if (mItems.size() > 0 && (totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 12))) {
                 //getVideoList(pageIndex);
                 Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
                 searchData(false);
@@ -191,46 +203,47 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
     private void searchData(final boolean clearData) {
 
-        new Thread() {
-            public void run() {
-                APICalls.setSyncInterface(new SyncInterface() {
-                    @Override
-                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
-                        switch (result) {
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+        if (SearchListFragment.this.isVisible()) {
+            new Thread() {
+                public void run() {
+                    APICalls.setSyncInterface(new SyncInterface() {
+                        @Override
+                        public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                            switch (result) {
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
 //                                mSearchList = (List<VideoDetailResponse>) resultObject;
-                                List<VideoDetailResponse> res = (List<VideoDetailResponse>) resultObject;
-                                mTotalRecords = totalRecords;
-                                if(clearData){
-                                    mItems.clear();
-                                    pageIndex = 1;
-                                } else {
-                                    pageIndex++;
-                                }
+                                    List<VideoDetailResponse> res = (List<VideoDetailResponse>) resultObject;
+                                    mTotalRecords = totalRecords;
+                                    if (clearData) {
+                                        mItems.clear();
+                                        pageIndex = 1;
+                                    } else {
+                                        pageIndex++;
+                                    }
+                                    if (res.size() > 0) {
+                                        mItems.addAll(res);
+                                        mAdapter.notifyDataSetChanged();
+                                    }
 
-                                if (res.size() > 0) {
-                                    mItems.addAll(res);
-                                    mAdapter.notifyDataSetChanged();
-                                }
-
-                                break;
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
-                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
-                                break;
-                            default:
-                                ProgressHandler.hideProgressDialogue();
-                                break;
+                                    break;
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                                case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                    break;
+                                default:
+                                    ProgressHandler.hideProgressDialogue();
+                                    break;
+                            }
                         }
+                    });
+                    //TODO: use this call for search
+                    if (mSearchTerm != null) {
+                        APICalls.fetchSearchResults(mSearchTerm, -1, -1, getContext(), pageIndex);
                     }
-                });
-                //TODO: use this call for search
-                if (mSearchTerm != null) {
-                    APICalls.fetchSearchResults(mSearchTerm, -1, -1, getContext(), pageIndex);
                 }
-            }
-        }.start();
+            }.start();
+        }
     }
 
     @Override
@@ -252,15 +265,18 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        mSearchTerm = query;
+        searchData(true);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mSearchTerm = newText;
-        searchData(true);
+//        mSearchTerm = newText;
+//        searchData(true);
         return false;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -275,5 +291,42 @@ public class SearchListFragment extends Fragment implements SearchView.OnQueryTe
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(VideoDetailResponse item);
+    }
+
+    private void fetchSurveyFilters() {
+
+        new Thread() {
+            public void run() {
+                APICalls.setSyncInterface(new SyncInterface() {
+                    @Override
+                    public void onAPIResult(int result, Object resultObject, int totalRecords) {
+                        switch (result) {
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SUCCESS:
+                                HashMap<String, Object> searchOptions = new HashMap<>();
+                                mGenreList = (List<GenreListResponse>) searchOptions.get("categories");
+                                mDurationList = (List<DurationResponse>) searchOptions.get("durations");
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_ERROR:
+                            case Constants.ServiceResponseCodes.RESPONSE_CODE_UNAUTHORIZED_USER:
+                                break;
+                            default:
+                                ProgressHandler.hideProgressDialogue();
+                                break;
+                        }
+                    }
+                });
+                //TODO: use this call for search
+                if (mSearchTerm != null) {
+                    APICalls.getCategoryList(getContext());
+                }
+            }
+        }.start();
+    }
+
+    private void setSearchFilters() {
+
     }
 }

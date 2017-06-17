@@ -30,6 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/nav_header_vertical_spacing"
                 android:src="@drawable/ic_profile_default_image"
+                android:visibility="gone"
                 app:civ_border_color="#000"
                 app:civ_border_width="0dp" />
 
@@ -40,11 +41,15 @@
                 android:layout_marginTop="10dp"
                 android:text="Change profile photo"
                 android:textAlignment="center"
-                android:textColor="@color/secondary_text_color" />
+                android:textColor="@color/secondary_text_color"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
                 android:text="Profile Info"
                 android:textColor="@color/primary_text_color"
                 android:textSize="16sp"
@@ -62,22 +67,24 @@
                     android:id="@+id/ic_icon_username"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
+                    android:src="@drawable/ic_username" />
 
                 <TextView
                     android:id="@+id/txt_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/ic_icon_username"
                     android:text="Username"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
+
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="1dp"
+                    android:layout_height="1px"
                     android:layout_below="@id/ic_icon_username"
-                    android:background="#ccc"/>
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
 
             </RelativeLayout>
 
@@ -89,20 +96,132 @@
                 android:layout_margin="5dp">
 
                 <ImageView
-                    android:id="@+id/ic_icon_email"
+                    android:id="@+id/ic_icon_login_name"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_like" />
 
                 <TextView
-                    android:id="@+id/txt_email"
+                    android:id="@+id/txt_login_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@id/ic_icon_login_name"
+                    android:text="Login Name"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/secondary_text_color" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_login_name"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/ic_icon_website"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_like" />
+
+                <TextView
+                    android:id="@+id/txt_website"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/ic_icon_website"
+                    android:text="Website"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/secondary_text_color" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_website"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/ic_icon_info"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_like" />
+
+                <TextView
+                    android:id="@+id/txt_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@id/ic_icon_info"
+                    android:text="City"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/secondary_text_color" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_info"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="15dp"
+                android:text="Privacy"
+                android:textColor="@color/primary_text_color"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp">
+
+                <ImageView
+                    android:id="@+id/ic_icon_email"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_email_24dp" />
+
+                <TextView
+                    android:id="@+id/txt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/ic_icon_email"
                     android:text="Email"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_email"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -115,17 +234,26 @@
                     android:id="@+id/ic_icon_phone"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
+                    android:src="@drawable/ic_phone" />
 
                 <TextView
                     android:id="@+id/txt_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/ic_icon_phone"
-                    android:text="123213123213123"
+                    android:text="+4434324438"
                     android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
+                    android:textColor="@color/secondary_text_color"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_phone"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -144,114 +272,19 @@
                     android:id="@+id/txt_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@id/ic_icon_gender"
                     android:text="Gender"
                     android:textAlignment="textStart"
                     android:textColor="@color/secondary_text_color" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ic_icon_gender"
+                    android:layout_marginTop="4dp"
+                    android:background="#ccc" />
             </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_info"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/ic_icon_info"
-                    android:text="Public"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_country"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/ic_icon_country"
-                    android:text="Country"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_city"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/ic_icon_city"
-                    android:text="City"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="5dp">
-
-                <ImageView
-                    android:id="@+id/ic_icon_address"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_like" />
-
-                <TextView
-                    android:id="@+id/txt_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/ic_icon_address"
-                    android:text="Address"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/secondary_text_color" />
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Privacy"
-                android:textColor="@color/primary_text_color"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
 
 
         </LinearLayout>

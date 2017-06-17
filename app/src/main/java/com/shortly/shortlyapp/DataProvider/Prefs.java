@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.shortly.shortlyapp.model.LoginResponse;
-import com.shortly.shortlyapp.model.LoginResponseDTO;
 import com.shortly.shortlyapp.utils.PrefUtils;
 
 /**
@@ -13,17 +12,6 @@ import com.shortly.shortlyapp.utils.PrefUtils;
 
 public class Prefs extends PrefUtils {
     private static Prefs instance;
-    public final String KEY_SELECTED_SURVEY_TYPE = getKey("lastSelectedSurveyType");
-    public final String KEY_LAST_TASK_SEARCHED = getKey("lastTaskSearched");
-    public final String KEY_GPS_ENABLED = getKey("gpsEnabled");
-    public final String KEY_QUESTION_LIST_TAB_SELECTED = getKey("lastQuestionListTabSelected");
-    public final String KEY_QUESTION_DETAIL_TAB_SELECTED = getKey("lastQuestionDetailTabSelected");
-    public final String KEY_QUESTION_DETAIL_Question_SELECTED = getKey("lastQuestionDetailQueSelected");
-
-    public final String KEY_FORCED_UPDATE_REQUIRED = getKey("forcedUpdateRequired");
-    public final String KEY_UPDATE_AVAILABLE = getKey("updateAvailable");
-    public final String KEY_APP_SERVER_VERSION = getKey("appServerVersion");
-    public final String KEY_SYNC_UNSUCCESSFUL = getKey("gpsEnabled");
 
 
     //Login
@@ -32,14 +20,6 @@ public class Prefs extends PrefUtils {
     public static final String KEY_USER_PASSWORD = "userPassword";
     public static final String KEY_USER_Id = "userId";
     public static final String KEY_CURRENT_USER = "currentUser";
-    public static final String KEY_LAST_SYNC_DATE = "lastSyncDate";
-    public static final String KEY_IS_AUTO_SYNC_REQUIRED = "isAutoSyncRequired";
-    public static final String KEY_IS_DATA_BACKUP_REQUIRED = "isDataBackupRequired";
-    public static final String KEY_UNIQUE_DEVICE_ID = "uniqueDeviceId";
-    public static final String KEY_LOG_LEVEL = "logLevel";
-    public static final String KEY_IS_LOG_FILE_REQUIRED = "isLogFileRequired";
-    public static final String KEY_SERVER_TIME_ZONE = "serverTimeZone";
-    public static final String KEY_DEVICE_IMEI = "deviceIMEI";
 
 
     private Prefs(Context context) {
@@ -93,31 +73,11 @@ public class Prefs extends PrefUtils {
         putString(KEY_CURRENT_USER, JSONObject);
     }
 
-    public LoginResponseDTO getCurrentUser() {
+    public LoginResponse getCurrentUser() {
         Gson gson = new Gson();
         String json = getString(KEY_CURRENT_USER, "");
-        LoginResponseDTO user = gson.fromJson(json, LoginResponseDTO.class);
+        LoginResponse user = gson.fromJson(json, LoginResponse.class);
         return user;
-    }
-
-    public void deleteEmployeeUserName() {
-        deletePref(KEY_USER_NAME);
-    }
-
-    public void deleteEmployeePassword() {
-        deletePref(KEY_USER_PASSWORD);
-    }
-
-    public void deleteEmployeeAuthToken() {
-        deletePref(KEY_AUTHENTICATION_TOKEN);
-    }
-
-    public void deleteEmployeeId() {
-        deletePref(KEY_USER_Id);
-    }
-
-    public void deleteCurrentUser() {
-        deletePref(KEY_CURRENT_USER);
     }
 
 }

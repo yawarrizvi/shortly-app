@@ -97,6 +97,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
         mViewPager.setPagingEnabled(false);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.setOffscreenPageLimit(0);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -139,10 +140,11 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
 //                                mVideoListData = (ArrayList<Object>) resultObject;
                                 updateVideoListData((ArrayList<Object>) resultObject);
                                 mVideoListCount = totalRecords;
-                                mSectionsPagerAdapter.notifyDataSetChanged();
                                 if (fetchWatchLaterData) {
                                     getWatchLaterList();
                                     hideLoader();
+                                } else {
+                                    mSectionsPagerAdapter.notifyDataSetChanged();
                                 }
                                 Log.v("", "Video List Complete");
                                 break;
@@ -176,6 +178,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
                                 mWatchLaterListCount = totalRecords;
                                 //TODO: update recycler view
                                 hideLoader();
+                                mSectionsPagerAdapter.notifyDataSetChanged();
                                 Log.v("", "Watch Later Complete");
                                 break;
                             case Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY:
@@ -190,7 +193,7 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
                         }
                     }
                 });
-                APICalls.getWatchLaterVideos(mWatchLaterPageNumber, ShortlyTabViewActivity.this);
+                APICalls.getWatchLaterVideos(mWatchLaterPageNumber, ShortlyTabViewActivity.this, false);
 
             }
 
@@ -361,7 +364,6 @@ public class ShortlyTabViewActivity extends AppCompatActivity implements SearchL
     private void hideLoader() {
         mApiCallCount++;
         if (mApiCallCount == 2) {
-
             ProgressHandler.hideProgressDialogue();
         }
 

@@ -196,7 +196,7 @@
     <color name="text_shadow">#7F000000</color>
 
     <!--Shortly-->
-    <color name="primary_text_color">#EB6B16</color>
-    <color name="secondary_text_color">#91B7B9</color>
+    <color name="primary_text_color">#F0802D</color>
+    <color name="secondary_text_color">#A2C3C5</color>
 
 </resources>

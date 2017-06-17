@@ -230,13 +230,17 @@ public class APICalls {
     }
 
     public static void getVideoList(final int pageNumber, final ArrayList<Object> videoListResult, final Context context) {
+        if (videoListResult.size() == 0) {
+            //has been called for next page therefor cancel all previous request
+            cancelAllRequests();
+        }
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
             Prefs prefs = Prefs.getInstance(context);
             String authToken = prefs.getAuthenticationToken();
             RestClient.ShortlyApiInterface service = RestClient.getShortlyClient(WebUrls.SERVICE_NAME);
-            Call<MostViewedListDTO> getMostViewedVideosCall = service.getMostViewedVideos(authToken, pageNumber);
+            Call<MostViewedListDTO> getMostViewedVideosCall = service.getVideoList(authToken, pageNumber);
             getMostViewedVideosCall.enqueue(new Callback<MostViewedListDTO>() {
                 @Override
                 public void onResponse(Call<MostViewedListDTO> call, Response<MostViewedListDTO> response) {
@@ -563,6 +567,7 @@ public class APICalls {
                         stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_SERVICE_FAILURE);
                     }
                 }
+
                 @Override
                 public void onFailure(Call<GenreListDTO> call, Throwable t) {
                     // there is more than just a failing request (like: no internet connection)
@@ -572,7 +577,7 @@ public class APICalls {
         }
     }
 
-    public static void getDurationsList(final HashMap<String, Object> searchOptions,final Context context) {
+    public static void getDurationsList(final HashMap<String, Object> searchOptions, final Context context) {
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
@@ -648,7 +653,10 @@ public class APICalls {
         }
     }
 
-    public static void getWatchLaterVideos(int pageNumber, final Context context) {
+    public static void getWatchLaterVideos(int pageNumber, final Context context, boolean cancelRequests) {
+        if (cancelRequests) {
+            cancelAllRequests();
+        }
         if (!NetworkManager.isConnected(context)) {
             stopSyncDownloadProcess(context, Constants.ServiceResponseCodes.RESPONSE_CODE_NO_CONNECTIVITY);
         } else {
