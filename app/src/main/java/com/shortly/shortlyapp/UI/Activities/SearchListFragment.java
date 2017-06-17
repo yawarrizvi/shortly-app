@@ -6,9 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.shortly.shortlyapp.Interfaces.SyncInterface;
@@ -27,7 +31,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class SearchListFragment extends Fragment {
+public class SearchListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -36,9 +40,11 @@ public class SearchListFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private  List<VideoDetailResponse> mItems;
     SearchListRecyclerViewAdapter mAdapter;
+    SearchView mSearchView;
+    String mSearchTerm = "";
 
     int mTotalRecords = 0;
-    int pageIndex = 2;
+    int pageIndex = 1;
     int previousVisibleItems, visibleItemCount, totalItemCount; //infinite scroll
 
     LinearLayoutManager mLinearLayoutManager;
@@ -78,10 +84,67 @@ public class SearchListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_item_list, container, false);
 
+
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        //if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+
+            //search view
+            mSearchView = (SearchView) view.findViewById(R.id.search_view);
+            mSearchView.setOnQueryTextListener(this);
+            mSearchView.setQueryHint("Enter search term here...");
+
+        /**
+         * Code For Spinner
+         */
+
+        Spinner spinner = (Spinner) view.findViewById(R.id.genre);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                        R.array.genre_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+        Spinner spinner2 = (Spinner) view.findViewById(R.id.duration);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(getContext(),
+                R.array.duration_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
+
+        /**
+         * Code for Recycler view
+         */
+        //list items
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);;
             if (mColumnCount <= 1) {
                 mLinearLayoutManager = new LinearLayoutManager(context);
                 recyclerView.setLayoutManager(mLinearLayoutManager);
@@ -94,7 +157,9 @@ public class SearchListFragment extends Fragment {
             }
             recyclerView.setAdapter(mAdapter);
 
-        }
+
+
+        //}
         return view;
     }
 
@@ -113,6 +178,7 @@ public class SearchListFragment extends Fragment {
             if ((totalItemCount > 0 && totalItemCount - (visibleItemCount + previousVisibleItems) < Constants.ITEM_THRESHOLD) && (mTotalRecords > (pageIndex * 12))) {
                 //getVideoList(pageIndex);
                 Toast.makeText(getContext(), "Fetch Next Page Data", Toast.LENGTH_SHORT).show();
+                searchData(false);
             }
 
         }
@@ -123,7 +189,7 @@ public class SearchListFragment extends Fragment {
         }
     };
 
-    private void searchData(final String searchTerm) {
+    private void searchData(final boolean clearData) {
 
         new Thread() {
             public void run() {
@@ -135,9 +201,15 @@ public class SearchListFragment extends Fragment {
 //                                mSearchList = (List<VideoDetailResponse>) resultObject;
                                 List<VideoDetailResponse> res = (List<VideoDetailResponse>) resultObject;
                                 mTotalRecords = totalRecords;
+                                if(clearData){
+                                    mItems.clear();
+                                    pageIndex = 1;
+                                } else {
+                                    pageIndex++;
+                                }
+
                                 if (res.size() > 0) {
                                     mItems.addAll(res);
-                                    pageIndex++;
                                     mAdapter.notifyDataSetChanged();
                                 }
 
@@ -154,8 +226,8 @@ public class SearchListFragment extends Fragment {
                     }
                 });
                 //TODO: use this call for search
-                if (searchTerm != null) {
-                    APICalls.fetchSearchResults(searchTerm, -1, -1, getContext(), 1);
+                if (mSearchTerm != null) {
+                    APICalls.fetchSearchResults(mSearchTerm, -1, -1, getContext(), pageIndex);
                 }
             }
         }.start();
@@ -176,6 +248,18 @@ public class SearchListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mSearchTerm = newText;
+        searchData(true);
+        return false;
     }
 
     /**

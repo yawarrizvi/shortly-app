@@ -48,4 +48,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="genre_array">
+        <item>Romantic</item>
+        <item>Comedy</item>
+        <item>Horror</item>
+        <item>Thriller</item>
+    </string-array>
+
+    <string-array name="duration_array">
+        <item>15 min</item>
+        <item>20 min</item>
+        <item>50 min</item>
+        <item>1 hr</item>
+    </string-array>
+
 </resources>

@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:id="@+id/filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/search_view">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:prompt="@string/action_settings"
+            android:spinnerMode="dialog">
+        </android.support.v7.widget.AppCompatSpinner>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:prompt="@string/action_settings"
+            android:spinnerMode="dialog">
+        </android.support.v7.widget.AppCompatSpinner>
+
+    </LinearLayout>
+
+<android.support.v7.widget.RecyclerView
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.shortly.shortlyapp.UI.Activities.SearchListFragment"
     android:id="@+id/list"
     android:name="com.shortly.shortlyapp.UI.Activities.ItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_centerHorizontal="true"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.shortly.shortlyapp.UI.Activities.SearchListFragment"
     tools:listitem="@layout/fragment_search_item"
     android:padding="5dp"
-    android:background="#000"/>
+    android:background="#000"
+    android:layout_below="@+id/filters"/>
+</RelativeLayout>
